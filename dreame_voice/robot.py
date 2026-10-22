@@ -9,10 +9,9 @@ only ever holds one custom voice.
 
 import json
 import socket
+import subprocess
 import threading
 import time
-import urllib.error
-import urllib.request
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -63,14 +62,20 @@ class _PackServer:
 
 
 def _request(method: str, url: str, payload: dict | None = None) -> bytes:
-    data = json.dumps(payload).encode() if payload is not None else None
-    req = urllib.request.Request(url, data=data, method=method,
-                                 headers={"Content-Type": "application/json"})
+    # curl, not urllib: macOS Local Network privacy can block Python from reaching
+    # LAN hosts ("No route to host") while curl is allowed.
+    cmd = ["curl", "-sS", "--fail-with-body", "--max-time", "10", "-X", method,
+           "-H", "Content-Type: application/json"]
+    if payload is not None:
+        cmd += ["-d", json.dumps(payload)]
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            return resp.read()
-    except (urllib.error.URLError, OSError) as e:
-        raise InstallError(f"Could not reach Valetudo at {url}: {e}")
+        result = subprocess.run([*cmd, url], capture_output=True)
+    except FileNotFoundError:
+        raise InstallError("curl is required but was not found")
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout).decode(errors="replace").strip()
+        raise InstallError(f"Could not reach Valetudo at {url}: {detail}")
+    return result.stdout
 
 
 def get_status(robot_host: str) -> dict:

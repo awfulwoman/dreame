@@ -48,7 +48,7 @@ class FakeValetudo:
     def _download(self, payload):
         self.status = "downloading"
         try:
-            data = b"" if self.fail_download else urllib.request.urlopen(payload["url"]).read()
+            data = b"" if self.fail_download else self._fetch(payload["url"])
         except Exception:
             data = b""
         if hashlib.md5(data).hexdigest() == payload["hash"]:
@@ -56,6 +56,17 @@ class FakeValetudo:
             self.status = "idle"
         else:
             self.status = "error"
+
+    @staticmethod
+    def _fetch(url):
+        # http.client, so tests can forbid urllib without breaking the fake robot
+        import http.client
+        from urllib.parse import urlsplit
+
+        parts = urlsplit(url)
+        conn = http.client.HTTPConnection(parts.hostname, parts.port, timeout=5)
+        conn.request("GET", parts.path)
+        return conn.getresponse().read()
 
     def close(self):
         self.server.shutdown()
@@ -156,3 +167,16 @@ def test_cli_install_reads_robot_from_environment(project, valetudo):
     result = _cli(project, "install", "beep", env={"DREAME_ROBOT": valetudo.host})
     assert "--robot" not in result.output  # host was found; fails later for the missing pack
     assert "generate" in result.output
+
+
+def test_valetudo_calls_go_through_curl_not_python_sockets(valetudo, pack, monkeypatch):
+    # macOS can block Python (but not curl) from the local network
+    import urllib.request
+
+    def refuse(*args, **kwargs):
+        raise AssertionError("urllib used to reach Valetudo")
+
+    monkeypatch.setattr(urllib.request, "urlopen", refuse)
+    path, digest = pack
+    install_pack(path, digest, "BEEP", valetudo.host, serve_host="127.0.0.1", poll_interval=0.05)
+    assert valetudo.language == "beep"
