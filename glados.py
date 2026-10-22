@@ -7,7 +7,7 @@ import hashlib
 
 VOICEPACK_NAME = "glados"
 
-CSV_SOURCE = "sounds.csv"
+CSV_SOURCE = "dialog/manufacturer/sounds.csv"
 AUDIO_DIR = "audio/generated/"
 VOICEPACKS_DIR = "voicepacks/"
 VOICEPACK_DIR = os.path.join(VOICEPACKS_DIR, VOICEPACK_NAME)

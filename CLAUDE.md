@@ -10,7 +10,7 @@ Archive and documentation of the voice audio from a rooted Dreame L10 Pro (`drea
 
 - `audio/manufacturer/xiaomi/` — official English pack from Xiaomi's servers; `audio/manufacturer/firmware/` — built-in English voice copied from the robot's `/audio/EN/` (different recordings, see `audio/README.md`). Both copyrighted; kept for research only. `audio/generated/<voice>/` — script output.
 - On the robot, the firmware plays `/audio/{ZH,EN}/` or `/data/personalized_voice/<LANG>/`, chosen by `/data/config/ava/language_in_use` (see `/etc/init.d/play_boot_music.sh`).
-- `sounds.csv` — `ID,Filename,Text`; drives generation. `sounds_custom.csv` is a near-copy for edited/custom phrasing (currently not read by any script; scripts hardcode `CSV_SOURCE = "sounds.csv"`).
+- `dialog/manufacturer/sounds.csv` — `ID,Filename,Text`; the manufacturer's phrasing; drives generation (scripts hardcode `CSV_SOURCE`). `dialog/custom/sounds.csv` is a near-copy for custom phrasing (only ID 13 differs); not read by any script yet.
 - `voicepacks/<name>/` — generated `voice_pack.tar.gz` plus an md5 file.
 
 ## Generating voice packs
