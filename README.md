@@ -2,7 +2,7 @@
 
 I recently rooted my Dreame L10 Pro (model `dreame.vacuum.p2029`). There was a bunch of audio files in there that I wanted to save and document.
 
-I don't own the copyright on the original audio files - they are kept here for purely academic and research purposes.
+I don't own the copyright on the original audio files - they are kept here for purely academic and research purposes. They are in `archive/`, with the transcription in `archive/sounds.csv`.
 
 ## Sound files and text
 
@@ -131,41 +131,52 @@ Don't Vacuumn Me also has some matching sound files at https://builder.dontvacuu
 
 The Dreame models accept unsigned voice packs (https://robotinfo.dev/detail_dreame.vacuum.p2029_0.html).
 
-`dreame-voice` reads a dialog script, speaks each line with a text-to-speech engine, and builds a voice pack. It needs [uv](https://docs.astral.sh/uv/).
+`dreame-voice` builds a voice pack from a voice file. Each voice file has its own wording for every prompt, and a text-to-speech engine speaks it. It needs [uv](https://docs.astral.sh/uv/).
 
 ```sh
 uv sync --extra piper           # add --extra xtts for Coqui XTTS (pulls in torch)
+uv run dreame-voice new marvin --engine say       # start voices/marvin.yaml
 uv run dreame-voice list
 uv run dreame-voice generate glados
 uv run dreame-voice generate glados --only 13 --only 18   # redo some lines, rebuild the pack
-uv run dreame-voice install glados --robot 192.168.1.102          # or set DREAME_ROBOT
+uv run dreame-voice install glados --robot 192.168.1.102  # or set DREAME_ROBOT
 uv run pytest
 ```
 
-### Naming
-
-Everything follows from the voice name:
+### Layout
 
 | Path | What |
 | --- | --- |
-| `voices/<name>.yaml` | Voice definition: dialog script, engine, engine options |
-| `dialog/<dialog>/sounds.csv` | Dialog script (`ID,Filename,Text`) |
-| `audio/generated/<name>/<id>.ogg` | Generated audio: Ogg Vorbis, mono, 16 kHz, like the manufacturer's files |
-| `voicepacks/<name>.tar.gz` | Voice pack: the `.ogg` files at the archive root |
-| `voicepacks/<name>.md5` | MD5 of the pack, which the robot checks |
-| `models/` | Downloaded TTS models (not committed) |
+| `archive/sounds.csv` | The manufacturer's prompts. Defines what each ID means and which IDs every voice must cover |
+| `archive/audio/` | The manufacturer's audio (see `archive/README.md`) |
+| `voices/<name>.yaml` | A voice: its engine and its wording for every ID |
+| `build/<name>/<id>.ogg` | Generated audio: Ogg Vorbis, mono, 16 kHz, like the manufacturer's files |
+| `build/<name>.tar.gz` | Voice pack: the `.ogg` files at the archive root |
+| `build/<name>.md5` | MD5 of the pack, which the robot checks |
+| `models/` | Downloaded TTS models |
+
+`build/` and `models/` are not committed. Run `generate` to rebuild them.
 
 The robot language ID defaults to the name in upper case (`GLADOS`). `EN` and `ZH` are refused, because the robot plays its built-in files for those.
 
-### Voice definitions
+### Voice files
 
 ```yaml
-dialog: manufacturer        # dialog/manufacturer/sounds.csv
 language_id: GLADOS         # optional
 engine:
   type: piper               # say | piper | xtts
   model: models/glados.onnx
+lines:
+  # Robot startup sound.
+  0:
+    file: archive/audio/firmware/0.ogg     # use this audio as-is
+  # Returning to the dock to charge.
+  13: I'm done. Going back home to charge.  # speak this
 ```
+
+The ID decides the file name on the robot (`13` becomes `13.ogg`), so a line can say anything, as long as it has the same purpose as the original. `new` writes every ID with the manufacturer's text, and the original as a comment above it, ready to reword. The startup and shutdown sounds (0 and 200) point at the firmware audio.
+
+A voice must have exactly the IDs in `archive/sounds.csv`. `generate` refuses a voice with a missing or unknown ID.
 
 Engine options:
 

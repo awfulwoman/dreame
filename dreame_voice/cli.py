@@ -5,12 +5,13 @@ import click
 from .config import ConfigError, load_voice, voice_names
 from .engines import EngineError
 from .generate import generate as run_generate
+from .new import render_voice
 from .robot import InstallError, get_status, install_pack
 
 
 @click.group()
 @click.option("--root", type=click.Path(file_okay=False, path_type=Path), default=Path("."),
-              show_default=True, help="Repo root holding voices/, dialog/, audio/ and voicepacks/.")
+              show_default=True, help="Repo root holding voices/, archive/ and build/.")
 @click.pass_context
 def main(ctx, root):
     """Generate Dreame vacuum voice packs."""
@@ -24,9 +25,29 @@ def list_voices(root):
     for name in voice_names(root):
         try:
             v = load_voice(root, name)
-            click.echo(f"{name:<16} {v.engine:<8} dialog={v.dialog:<14} language_id={v.language_id}")
+            spoken = sum(1 for line in v.lines if line.text)
+            click.echo(f"{name:<16} {v.engine:<8} language_id={v.language_id:<10} "
+                       f"{spoken} spoken, {len(v.lines) - spoken} from files")
         except ConfigError as e:
             click.echo(f"{name:<16} INVALID: {e}")
+
+
+@main.command()
+@click.argument("name")
+@click.option("--engine", "engine_type", required=True, help="Engine type: say, piper or xtts.")
+@click.pass_obj
+def new(root, name, engine_type):
+    """Start voices/NAME.yaml with every line in the manufacturer's words."""
+    path = root / "voices" / f"{name}.yaml"
+    if path.exists():
+        raise click.ClickException(f"voices/{name}.yaml already exists")
+    try:
+        text = render_voice(root, engine_type)
+    except FileNotFoundError as e:
+        raise click.ClickException(str(e))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text)
+    click.echo(f"Wrote voices/{name}.yaml; add engine options, then reword the lines")
 
 
 @main.command()
