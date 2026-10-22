@@ -8,7 +8,7 @@ import hashlib
 VOICEPACK_NAME = "moira"
 
 CSV_SOURCE = "sounds.csv"
-AUDIO_DIR = "audio/"
+AUDIO_DIR = "audio/generated/"
 VOICEPACKS_DIR = "voicepacks/"
 VOICEPACK_DIR = os.path.join(VOICEPACKS_DIR, VOICEPACK_NAME)
 AUDIO_FILES_DIR = os.path.join(AUDIO_DIR, VOICEPACK_NAME)
