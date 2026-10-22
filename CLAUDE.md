@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Archive and documentation of the voice audio from a rooted Dreame L10 Pro (`dreame.vacuum.p2029`), plus `dreame-voice`, a CLI that generates replacement voice packs. `README.md` holds the filename → spoken-text table, layout and voice file format.
+Archive and documentation of the voice audio from a rooted Dreame L10 Pro (`dreame.vacuum.p2029`), plus `dreame-voice`, a CLI that generates replacement voice packs. `README.md` holds the layout and voice file format; `archive/sounds.csv` holds the prompt transcriptions.
 
 ## Commands
 
