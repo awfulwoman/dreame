@@ -4,20 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Archive and documentation of the voice audio from a rooted Dreame L10 Pro (`dreame.vacuum.p2029`), plus scripts that generate replacement voice packs. Not a service; no tests, build, or lint setup. `README.md` holds the filename → spoken-text table (the source of truth for what each numbered file says) and notes on uploading custom packs (`/data/personalized_voice/<lang>/`, Ogg Vorbis).
+Archive and documentation of the voice audio from a rooted Dreame L10 Pro (`dreame.vacuum.p2029`), plus `dreame-voice`, a CLI that generates replacement voice packs. `README.md` holds the filename → spoken-text table and the naming convention.
 
-## Layout
+## Commands
 
-- `audio/manufacturer/xiaomi/` — official English pack from Xiaomi's servers; `audio/manufacturer/firmware/` — built-in English voice copied from the robot's `/audio/EN/` (different recordings, see `audio/README.md`). Both copyrighted; kept for research only. `audio/generated/<voice>/` — script output.
-- On the robot, the firmware plays `/audio/{ZH,EN}/` or `/data/personalized_voice/<LANG>/`, chosen by `/data/config/ava/language_in_use` (see `/etc/init.d/play_boot_music.sh`).
-- `dialog/manufacturer/sounds.csv` — `ID,Filename,Text`; the manufacturer's phrasing; drives generation (scripts hardcode `CSV_SOURCE`). `dialog/custom/sounds.csv` is a near-copy for custom phrasing (only ID 13 differs); not read by any script yet.
-- `voicepacks/<name>/` — generated `voice_pack.tar.gz` plus an md5 file.
+```sh
+uv sync --extra piper            # --extra xtts adds Coqui (torch); project pinned to Python 3.13 (coqui needs <3.15)
+uv run pytest                    # single test: uv run pytest tests/test_pack.py::test_pack_is_reproducible
+uv run dreame-voice list
+uv run dreame-voice generate <voice> [--only ID ...]
+uv run dreame-voice install <voice> --robot <host>   # or DREAME_ROBOT=<host>
+```
 
-## Generating voice packs
+## Architecture
 
-Run from repo root (paths are relative). Deps: `pip install -r requirements.txt` (`requests`, `pydub`; pydub needs `ffmpeg` installed).
+`dreame_voice/`: `config.py` (voices/<name>.yaml → `Voice`, which owns all derived paths) → `generate.py` (dialog lines → engine → WAV → `audio.wav_to_ogg` → `pack.build_pack`). Engines in `engines/` share one interface, `synthesize(text, wav_path)`, and are registered in `engines.ENGINES`; heavy deps (piper, torch) are imported lazily so tests run without them. Tests swap in a fake engine via `monkeypatch.setitem(engines.ENGINES, "fake", ...)`.
 
-- `python glados.py` — fetches TTS per CSV row from `https://glados.c-net.org/generate`, converts wav → ogg, tars. Calls `os.chown(..., 1000, 1000)`, so it fails when not run as root/with permission to chown.
-- `python moira.py` — macOS only; uses the `say -v Moira` command, then same wav → ogg → tar flow.
+- Audio conversion uses `soundfile` + `soxr`, not ffmpeg (Homebrew ffmpeg lacks libvorbis). Output matches the manufacturer files: Ogg Vorbis, mono, 16 kHz.
+- Packs are reproducible (fixed uid/gid/mtime, gzip mtime 0), so MD5 changes only when audio changes. Entries must be flat `<id>.ogg`.
+- Language IDs `EN`/`ZH` are rejected: firmware plays built-in `/audio/<ID>/` for those.
 
-The two scripts are near-duplicates and differ in small ways (tar entry paths: glados uses basenames, moira adds absolute paths via `tar.add(file)`; md5 file named `voice_pack.md5.txt` vs `voicepack.md5.txt`). Packs must contain `<id>.ogg` files at the tar root for the vacuum — check this when touching moira.py. A new voice = copy a script, change `VOICEPACK_NAME` and the TTS step.
+## Data layout
+
+- `audio/manufacturer/xiaomi/` — official English pack from Xiaomi's servers; `audio/manufacturer/firmware/` — built-in English voice copied from the robot's `/audio/EN/` (different recordings, see `audio/README.md`). Both copyrighted; kept for research only. `audio/generated/<voice>/` — tool output.
+- `dialog/manufacturer/sounds.csv` — manufacturer phrasing; `dialog/custom/sounds.csv` — custom phrasing (only ID 13 differs so far).
+- On the robot (root@192.168.1.102), the firmware plays `/audio/{ZH,EN}/` or `/data/personalized_voice/<LANG>/`, chosen by `/data/config/ava/language_in_use` (see `/etc/init.d/play_boot_music.sh`). Valetudo runs at `/data/valetudo`; its Dreame voice-pack install has the robot download a URL and verify an MD5.

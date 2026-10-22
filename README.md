@@ -129,10 +129,54 @@ Don't Vacuumn Me also has some matching sound files at https://builder.dontvacuu
 
 ## Generate your own sound files
 
-The Drame models seem to allow unsigned files to be uploaded. https://dontvacuum.me/robotinfo/detail_dreame.vacuum.p2029_0.html
+The Dreame models accept unsigned voice packs (https://robotinfo.dev/detail_dreame.vacuum.p2029_0.html).
 
-For now you can do this manually by copying custom sound files (named according to the above table) to `/data/personalized_voice/<your language>/` in Ogg Vorbis format on your Dreame L10 Pro.
+`dreame-voice` reads a dialog script, speaks each line with a text-to-speech engine, and builds a voice pack. It needs [uv](https://docs.astral.sh/uv/).
 
+```sh
+uv sync --extra piper           # add --extra xtts for Coqui XTTS (pulls in torch)
+uv run dreame-voice list
+uv run dreame-voice generate glados
+uv run dreame-voice generate glados --only 13 --only 18   # redo some lines, rebuild the pack
+uv run dreame-voice install glados --robot 192.168.1.102          # or set DREAME_ROBOT
+uv run pytest
+```
 
+### Naming
 
-As soon as I have time I'll make a script that loops over the CSV and creates a sound pack.
+Everything follows from the voice name:
+
+| Path | What |
+| --- | --- |
+| `voices/<name>.yaml` | Voice definition: dialog script, engine, engine options |
+| `dialog/<dialog>/sounds.csv` | Dialog script (`ID,Filename,Text`) |
+| `audio/generated/<name>/<id>.ogg` | Generated audio: Ogg Vorbis, mono, 16 kHz, like the manufacturer's files |
+| `voicepacks/<name>.tar.gz` | Voice pack: the `.ogg` files at the archive root |
+| `voicepacks/<name>.md5` | MD5 of the pack, which the robot checks |
+| `models/` | Downloaded TTS models (not committed) |
+
+The robot language ID defaults to the name in upper case (`GLADOS`). `EN` and `ZH` are refused, because the robot plays its built-in files for those.
+
+### Voice definitions
+
+```yaml
+dialog: manufacturer        # dialog/manufacturer/sounds.csv
+language_id: GLADOS         # optional
+engine:
+  type: piper               # say | piper | xtts
+  model: models/glados.onnx
+```
+
+Engine options:
+
+- `say` (macOS): `voice` (required), `rate`
+- `piper`: `model` (required), `config`, `model_url`, `config_url`, `speaker_id`, `length_scale`. A missing model or config is downloaded from its URL.
+- `xtts`: `speaker_wav` (required; a path or a list of paths to recordings of the voice to clone), `language`, `model`. The XTTS v2 model is under the Coqui Public Model License (non-commercial). Set `COQUI_TOS_AGREED=1` to accept it.
+
+### On the robot
+
+The firmware reads `/data/config/ava/language_in_use`. For `EN` or `ZH` it plays `/audio/<ID>/`. For any other ID it plays `/data/personalized_voice/<ID>/<id>.ogg`.
+
+`dreame-voice install` uses Valetudo's `VoicePackManagementCapability` API. Valetudo has no upload: the robot downloads the pack from a URL and checks its MD5. So the command serves the pack from this machine until the robot has it, then stops.
+
+**Installing a pack deletes every other custom voice on the robot.** The robot empties `/data/personalized_voice/` before it unpacks the new pack, so it holds only one custom voice at a time.

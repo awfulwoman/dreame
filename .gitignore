@@ -2,3 +2,7 @@
 output/
 .vscode
 tmp
+models/
+.venv/
+__pycache__/
+backups/

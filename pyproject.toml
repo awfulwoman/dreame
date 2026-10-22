@@ -1,0 +1,28 @@
+[project]
+name = "dreame-voice"
+version = "0.1.0"
+description = "Generate Dreame vacuum voice packs from a dialog script with pluggable TTS engines"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "click>=8.0",
+    "pyyaml>=6.0",
+    "soundfile>=0.13",
+    "soxr>=0.5",
+    "numpy>=2",
+]
+
+[project.optional-dependencies]
+piper = ["piper-tts>=1.8"]
+xtts = ["coqui-tts>=0.28"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[project.scripts]
+dreame-voice = "dreame_voice.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

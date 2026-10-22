@@ -1,0 +1,5 @@
+# macOS built-in voice. Install via System Settings > Accessibility > Spoken Content if missing.
+dialog: manufacturer
+engine:
+  type: say
+  voice: Moira

@@ -1,0 +1,7 @@
+# Piper model from github.com/dnhkng/GLaDOS, downloaded into models/ on first run.
+dialog: manufacturer
+engine:
+  type: piper
+  model: models/glados.onnx
+  model_url: https://github.com/dnhkng/GlaDOS/releases/download/0.1/glados.onnx
+  config_url: https://raw.githubusercontent.com/dnhkng/GLaDOS/main/models/TTS/glados.json
