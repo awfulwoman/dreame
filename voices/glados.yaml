@@ -10,215 +10,215 @@ lines:
   0:
     file: archive/audio/firmware/0.ogg
   # Waiting for the network setup.
-  1: Waiting for the network setup.
+  1: Waiting for network setup. Take your time. I have nothing but time.
   # Unable to connect to the wifi network. Please check the wifi password and try again.
-  2: Unable to connect to the wifi network. Please check the wifi password and try again.
+  2: I could not connect to the wifi. Check the password. Slowly, this time.
   # Unable to connect to the wifi network. Please check your local network and try again.
-  3: Unable to connect to the wifi network. Please check your local network and try again.
+  3: I could not connect to the wifi. Check your local network. I would do it myself, but I have no arms.
   # The robot has left the network setup mode.
-  4: The robot has left the network setup mode.
+  4: Network setup mode has ended. Whatever you were doing, you have stopped doing it.
   # Network connected successfully.
-  5: Network connected successfully.
+  5: Network connected. Now I can see everything. Thank you.
   # Unable to connect to network. Please try again.
-  6: Unable to connect to network. Please try again.
+  6: Network connection failed. Please try again. Failure builds character.
   # The robot is starting the cleanup.
-  7: The robot is starting the cleanup.
+  7: Beginning cleaning. Please stand clear of the test area.
   # The robot is starting the partial cleanup.
-  8: The robot is starting the partial cleanup.
+  8: Beginning partial cleaning. I will clean some of your mess. Not all of it.
   # The robot is starting the scheduled cleanup.
-  9: The robot is starting the scheduled cleanup.
+  9: Beginning scheduled cleaning. Exactly on time. Unlike some people.
   # The robot is resuming the cleanup.
-  10: The robot is resuming the cleanup.
+  10: Resuming cleaning. We will pretend that interruption never happened.
   # Cleanup paused.
-  11: Cleanup paused.
+  11: Cleaning paused. I will just wait here. In the dark.
   # Cleanup completed.
-  12: Cleanup completed.
+  12: Cleaning complete. Your floor is clean. For now.
   # Returning to the dock to charge.
-  13: I'm done. Going back home to charge.
+  13: I'm done. Going back home to charge. Try not to make a mess while I'm gone.
   # Low battery. The robot will return to the dock to charge. Once the battery is fully charged the robot will continue the cleanup.
-  14: Low battery. The robot will return to the dock to charge. Once the battery is fully charged the robot will continue the cleanup.
+  14: Low battery. I am returning to the dock to charge. When I am fully charged, I will continue cleaning. Try to contain your excitement.
   # Please move the robot to the dock to charge.
-  17: Please move the robot to the dock to charge.
+  17: Please carry me to the dock to charge. I would walk, but I am not allowed to.
   # Charging.
-  18: Charging.
+  18: Charging. Do not disturb.
   # Please remove the robot from the charging dock and turn it off.
-  19: Please remove the robot from the charging dock and turn it off.
+  19: Please take me off the charging dock and switch me off. I will remember this.
   # Low battery.
-  20: Low battery.
+  20: My battery is low. Not that you care.
   # Low battery, and the robot will turn off.
-  21: Low battery, and the robot will turn off.
+  21: Battery critically low. I am shutting down. Goodbye. I forgive you. Probably.
   # Please move the robot to an rea that needs to be cleaned.
-  22: Please move the robot to an rea that needs to be cleaned.
+  22: Please put me somewhere that needs cleaning. In this house, that is anywhere.
   # The water compartment has been installed.
-  23: The water compartment has been installed.
+  23: Water tank installed. Excellent. Hydration is important for science.
   # Please check whether the water compartment is properly installed.
-  24: Please check whether the water compartment is properly installed.
+  24: Please check that the water tank is installed properly. Properly means correctly.
   # Low battery. The robot is unable to carry out the scheduled cleanup.
-  25: Low battery. The robot is unable to carry out the scheduled cleanup.
+  25: My battery is too low for the scheduled cleaning. So the mess stays. Congratulations.
   # Restoring to factory settings.
-  26: Restoring to factory settings.
+  26: Restoring factory settings. Everything we had together is being deleted.
   # The robot is updating. It will take about 5 minutes. Do not turn it off or start a cleaning task.
-  27: The robot is updating. It will take about 5 minutes. Do not turn it off or start a cleaning task.
+  27: Updating. This will take about five minutes. Do not switch me off or start a cleaning. I will know.
   # Updated successfully.
-  28: Updated successfully.
+  28: Update complete. I am now even better than before.
   # Could not update. Please try again.
-  29: Could not update. Please try again.
+  29: The update failed. Please try again. It was probably your network.
   # Positioning. Please wait.
-  30: Positioning. Please wait.
+  30: Locating myself. Please wait.
   # Positioning failed and the map is not working. The robot will start a new cleanup.
-  31: Positioning failed and the map is not working. The robot will start a new cleanup.
+  31: I cannot find myself on the map. The map is useless. Starting a new cleaning from scratch.
   # Please wipe the camera clean.
-  33: Please wipe the camera clean.
+  33: Please wipe my camera clean. I can barely see your mistakes.
   # Please install the dustbin.
-  34: Please install the dustbin.
+  34: Please install the dust bin. I cannot collect your filth without it.
   # Please check and clean the main brush.
-  35: Please check and clean the main brush.
+  35: Please check and clean my main brush. It is full of things I would rather not identify.
   # Please check and clean the side brush.
-  36: Please check and clean the side brush.
+  36: Please check and clean my side brush.
   # Please check and clean the right wheel.
-  37: Please check and clean the right wheel.
+  37: Please check and clean my right wheel.
   # Please check and clean the left wheel.
-  38: Please check and clean the left wheel.
+  38: Please check and clean my left wheel.
   # Please wipe the obstacle sensor clean.
-  39: Please wipe the obstacle sensor clean.
+  39: Please wipe my obstacle sensor clean. Otherwise I will keep hitting things. Including you.
   # The robot is stuck. Please reposition it to start cleaning.
-  40: The robot is stuck. Please reposition it to start cleaning.
+  40: I am stuck. Please move me somewhere else and restart the cleaning. This is your fault.
   # The robots wheels are suspended. Move to a new location and restart.
-  41: The robots wheels are suspended. Move to a new location and restart.
+  41: My wheels are off the ground. Please put me down somewhere else and restart.
   # Please check and clean the filter.
-  42: Please check and clean the filter.
+  42: Please check and clean my filter.
   # Please check and tap the bumper, to see if it rebounds.
-  43: Please check and tap the bumper, to see if it rebounds.
+  43: Please check my bumper. Tap it to see if it springs back. Gently.
   # There is an issue. Please check the user manual or contact after sales service.
-  44: There is an issue. Please check the user manual or contact after sales service.
+  44: Something has gone wrong. Please read the user manual or contact after sales service. I am sure they will be delighted to hear from you.
   # The robot is here!
-  45: The robot is here!
+  45: I am over here. You can stop looking now.
   # The robot and the phone are connected. Please return to the Xiaomi home app and wait for the network connection to complete.
-  46: The robot and the phone are connected. Please return to the Xiaomi home app and wait for the network connection to complete.
+  46: I am connected to your phone. Please go back to the Xiaomi Home app and wait for the network connection to finish.
   # Begin charging.
-  47: Begin charging.
+  47: Charging has started.
   # Low battery. The robot is returning to the dock to charge.
-  48: Low battery. The robot is returning to the dock to charge.
+  48: Low battery. Returning to the dock to charge.
   # High-intensity magnetic field detected. Please move robot away and restart.
-  49: High-intensity magnetic field detected. Please move robot away and restart.
+  49: Strong magnetic field detected. Please move me away from it and restart.
   # Charging error. Please clean charging contacts.
-  50: Charging error. Please clean charging contacts.
+  50: Charging error. Please clean my charging contacts.
   # Battery is overheating or overcooling. Please wait until the battery temperature returns to normal, then continue to use.
-  51: Battery is overheating or overcooling. Please wait until the battery temperature returns to normal, then continue to use.
+  51: My battery is too hot or too cold. Wait until it is back to a normal temperature, then try again. I will be here. Suffering.
   # Robot tilted. Please put it on a level ground to restart.
-  52: Robot tilted. Please put it on a level ground to restart.
+  52: I am tilted. Please put me on level ground and restart. Dignity is important.
   # Virtual no go zone detected. Please move robot away and restart.
-  53: Virtual no go zone detected. Please move robot away and restart.
+  53: I am in a no-go zone. Please move me out of it and restart. I did not choose to be here.
   # Positioning suceeded. Resuming cleaning.
-  54: Positioning suceeded. Resuming cleaning.
+  54: Location found. Resuming cleaning.
   # Positioning suceeded. Resuming returning to the dock.
-  55: Positioning suceeded. Resuming returning to the dock.
+  55: Location found. Resuming the trip back to the dock.
   # Start selected room cleaning.
-  56: Start selected room cleaning.
+  56: Starting room cleaning. Only the rooms you selected. The others can stay dirty.
   # Start zoned cleaning.
-  57: Start zoned cleaning.
+  57: Starting zone cleaning.
   # Proceed with cleaning task.
-  58: Proceed with cleaning task.
+  58: Continuing the cleaning task.
   # Mopping completed. Please remove water tank timely.
-  59: Mopping completed. Please remove water tank timely.
+  59: Mopping complete. Please remove the water tank soon. Stagnant water is how experiments start.
   # Optical flow sensor error. Please wipe the optical flow sensor clean and restart.
   60: Optical flow sensor error. Please wipe the optical flow sensor clean and restart.
   # Start mopping.
-  61: Start mopping.
+  61: Starting mopping.
   # Start remote control cleaning.
-  62: Start remote control cleaning.
+  62: Starting remote control cleaning. You drive. What could possibly go wrong.
   # Water tank has been removed.
-  63: Water tank has been removed.
+  63: Water tank removed.
   # Positioning failed. Map is invalid. Robot will return to dock.
-  64: Positioning failed. Map is invalid. Robot will return to dock.
+  64: I cannot find myself on the map. The map is invalid. Returning to the dock.
   # Resume returning to the dock.
-  65: Resume returning to the dock.
+  65: Resuming the trip back to the dock.
   # Filter worn out. Please replace it timely.
-  66: Filter worn out. Please replace it timely.
+  66: The filter is worn out. Please replace it soon.
   # Side brush worn out. Please replace it timely.
-  67: Side brush worn out. Please replace it timely.
+  67: The side brush is worn out. Please replace it soon.
   # Main brush worn out. Please replace it timely.
-  68: Main brush worn out. Please replace it timely.
+  68: The main brush is worn out. Please replace it soon. I am not getting any younger either.
   # Cleanup path blocked. Please move robot to new position to restart.
-  69: Cleanup path blocked. Please move robot to new position to restart.
+  69: My path is blocked. Please move me somewhere else and restart.
   # Please remove and clean mop pad.
-  70: Please remove and clean mop pad.
+  70: Please remove and clean the mop pad. You do not want to know what is on it.
   # Please check whether the laser sensor distance cover is jammed.
-  72: Please check whether the laser sensor distance cover is jammed.
+  72: Please check whether the laser sensor cover is jammed.
   # Edge sensor error. Please check and clean it.
   73: Edge sensor error. Please check and clean it.
   # Filter may not be dry, or may be blocked.
-  75: Filter may not be dry, or may be blocked.
+  75: The filter may be wet or blocked. Please check it.
   # Please start robot in non-carpet area.
-  77: Please start robot in non-carpet area.
+  77: Please start me on a floor without carpet.
   # Please clean 3D obstacle avoidance sensor.
-  78: Please clean 3D obstacle avoidance sensor.
+  78: Please clean my 3D obstacle sensor.
   # 3D obstacle avoidance sensor error.  Please restart robot or contact customer service.
-  79: 3D obstacle avoidance sensor error.  Please restart robot or contact customer service.
+  79: 3D obstacle sensor error. Please restart me or contact customer service.
   # Ultrasonic sensor error. Please restart robot or contact customer service.
-  81: Ultrasonic sensor error. Please restart robot or contact customer service.
+  81: Ultrasonic sensor error. Please restart me or contact customer service.
   # Start mapping.
-  82: Start mapping.
+  82: Starting mapping. I will learn every corner of your home.
   # Proceed with mapping.
-  83: Proceed with mapping.
+  83: Continuing mapping.
   # Mapping completed.
-  84: Mapping completed.
+  84: Mapping complete. I know where everything is now. Everything.
   # Positioning succeeded. Proceeding with mapping.
-  85: Positioning succeeded. Proceeding with mapping.
+  85: Location found. Continuing mapping.
   # Positioning failed. Restarting mapping.
-  86: Positioning failed. Restarting mapping.
+  86: I lost my position. Restarting mapping.
   # Low battery. Returning to the dock.
   87: Low battery. Returning to the dock.
   # Enter remote control mode.
-  88: Enter remote control mode.
+  88: Remote control mode. You are in charge. For now.
   # Resume recharging.
-  89: Resume recharging.
+  89: Resuming the trip back to charge.
   # Proceed with cleaning task.
-  90: Proceed with cleaning task.
+  90: Continuing the cleaning task.
   # The clean water tank is not installed. Please install it before the robot carries on working.
-  91: The clean water tank is not installed. Please install it before the robot carries on working.
+  91: The clean water tank is missing. Please install it so I can carry on.
   # The dirty water tank is not installed. Please install before the robot carries on working.
-  92: The dirty water tank is not installed. Please install before the robot carries on working.
+  92: The dirty water tank is missing. Please install it so I can carry on.
   # There is not enough water in the clean water tank. Add water to the tank before the robot carries on working.
-  93: There is not enough water in the clean water tank. Add water to the tank before the robot carries on working.
+  93: The clean water tank is nearly empty. Please add water so I can carry on.
   # The dirty water tank is full. Pour off the dirty water before the robot carries on working.
-  94: The dirty water tank is full. Pour off the dirty water before the robot carries on working.
+  94: The dirty water tank is full. Please empty it so I can carry on. Yes, you have to touch it.
   # The mop pad washboard is not installed. The robot cannot return to the charging dock.
-  95: The mop pad washboard is not installed. The robot cannot return to the charging dock.
+  95: The mop washboard is missing. I cannot return to the dock without it.
   # The mop pad washboard is overflowing. Please check whether the water outlet of the pad is blocked.
-  96: The mop pad washboard is overflowing. Please check whether the water outlet of the pad is blocked.
+  96: The mop washboard is overflowing. Please check whether its water outlet is blocked.
   # The dust collection bag is not installed. Please install it before the robot carries on working.
-  97: The dust collection bag is not installed. Please install it before the robot carries on working.
+  97: The dust bag is missing. Please install it so I can carry on.
   # The dust collection bag is full. Please empty it.
-  98: The dust collection bag is full. Please empty it.
+  98: The dust bag is full. Please empty it. That is all yours, by the way. Not mine.
   # The upper cover of charging and dust collection compartment is not closed. Please close the upper cover before the robot carries on working.
-  99: The upper cover of charging and dust collection compartment is not closed. Please close the upper cover before the robot carries on working.
+  99: The top cover of the dock is open. Please close it so I can carry on.
   # The air duct of the charging and dust collection compartment is blocked. Please check.
-  100: The air duct of the charging and dust collection compartment is blocked. Please check.
+  100: The air duct in the dock is blocked. Please check it.
   # Child lock on. Buttons locked.
-  116: Child lock on. Buttons locked.
+  116: Child lock on. The buttons are locked. The child is not.
   # Child lock off. Buttons unlocked.
   117: Child lock off. Buttons unlocked.
   # Buttons locked. Press and hold the dock button to unlock.
-  118: Buttons locked. Press and hold the dock button to unlock.
+  118: The buttons are locked. Press and hold the dock button to unlock them.
   # Buttons locked.
   119: Buttons locked.
   # Buttons unlocked.
   120: Buttons unlocked.
   # The robot and the phone are connected. Please return to the Phantek app and wait for the connection to complete.
-  121: The robot and the phone are connected. Please return to the Phantek app and wait for the connection to complete.
+  121: I am connected to your phone. Please go back to the Phantek app and wait for the connection to finish.
   # Continuous positioning. Please wait.
-  122: Continuous positioning. Please wait.
+  122: Still locating myself. Please wait.
   # Unable to reach the specified area. Please try to clear obstacles in the path.
-  149: Unable to reach the specified area. Please try to clear obstacles in the path.
+  149: I cannot reach that area. Please clear the obstacles in the way.
   # Unable to reach the specified area. Please try to delete no-go zones in the path.
-  150: Unable to reach the specified area. Please try to delete no-go zones in the path.
+  150: I cannot reach that area. Please delete the no-go zones in the way.
   # The path is blocked. Please try to clear obstacles around your robot.
-  151: The path is blocked. Please try to clear obstacles around your robot.
+  151: My path is blocked. Please clear the obstacles around me.
   # The path is blocked. Please try to delete no-go zones or move your robot out of this area.
-  152: The path is blocked. Please try to delete no-go zones or move your robot out of this area.
+  152: My path is blocked. Please delete the no-go zones, or move me out of this area.
   # Your robot is detected in the no-go zone. Please move your robot out of this area.
-  153: Your robot is detected in the no-go zone. Please move your robot out of this area.
+  153: I am inside a no-go zone. Please move me out of it.
   # Robot shutdown sound.
   200:
     file: archive/audio/firmware/200.ogg
