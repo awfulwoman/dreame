@@ -21,7 +21,7 @@ Don't Vacuum Me also has matching sound files at https://builder.dontvacuum.me/p
 
 The Dreame models accept unsigned voice packs (https://robotinfo.dev/detail_dreame.vacuum.p2029_0.html).
 
-`dreame-voice` builds a voice pack from a voice file. There are two voices so far: `glados` (Piper, with a [GLaDOS model](https://github.com/dnhkng/GlaDOS)) and `moira` (the macOS `say` voice). Each voice file has its own wording for every prompt, and a text-to-speech engine speaks it. It needs [uv](https://docs.astral.sh/uv/).
+`dreame-voice` builds a voice pack from a voice file. There is one voice so far: `glados` (Piper, with a [GLaDOS model](https://github.com/dnhkng/GlaDOS)). Each voice file has its own wording for every prompt, and a text-to-speech engine speaks it. It needs [uv](https://docs.astral.sh/uv/).
 
 ```sh
 uv sync --extra piper           # add --extra xtts for Coqui XTTS (pulls in torch)
