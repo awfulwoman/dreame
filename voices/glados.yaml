@@ -1,6 +1,6 @@
 # language_id: NAME           # optional; defaults to the file name in upper case
-# A different variant of each line every three days. Lines you hear often have more.
-rotate_days: 3
+# A different variant of each line every day. Lines you hear often have more.
+rotate_days: 1
 engine:
   type: piper
   # Piper model from github.com/dnhkng/GLaDOS, downloaded into models/ on first run
