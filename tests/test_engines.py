@@ -34,3 +34,10 @@ def test_piper_requires_model():
 def test_xtts_requires_speaker_wav():
     with pytest.raises(EngineError, match="speaker_wav"):
         get_engine("xtts", {}, root=None)
+
+
+def test_say_without_say_command_raises_engine_error(tmp_path, monkeypatch):
+    monkeypatch.setenv("PATH", str(tmp_path))
+    engine = get_engine("say", {"voice": "Moira"}, root=tmp_path)
+    with pytest.raises(EngineError, match="macOS"):
+        engine.synthesize("hello", tmp_path / "out.wav")

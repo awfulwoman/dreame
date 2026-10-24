@@ -33,6 +33,18 @@ uv run dreame-voice install glados --robot 192.168.1.102  # or set DREAME_ROBOT
 uv run pytest
 ```
 
+### Docker
+
+The image `ghcr.io/awfulwoman/dreame` has the `piper` engine, `archive/sounds.csv`, the firmware startup and shutdown sounds, and `voices/`. The `say` engine needs macOS, so it does not work in the image. Build with `--build-arg EXTRAS="piper xtts"` to add XTTS.
+
+```sh
+docker build -t dreame-voice .
+docker run --rm -v dreame-models:/app/models -v dreame-build:/app/build dreame-voice generate glados
+docker run --rm -it --network host -v dreame-build:/app/build dreame-voice install glados --robot 192.168.1.102
+```
+
+Keep `/app/models` (downloaded Piper models) and `/app/build` (packs) on volumes. `install` needs `--network host`, because the robot downloads the pack from the container. Add `--yes` when there is no terminal. Mount a directory on `/app/voices` to use voice files that are not in the image.
+
 ### Voice files
 
 ```yaml

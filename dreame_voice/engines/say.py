@@ -18,6 +18,9 @@ class SayEngine:
         if self.rate:
             cmd += ["-r", str(self.rate)]
         # "--" so text starting with "-" isn't read as a flag
-        result = subprocess.run([*cmd, "--", text], capture_output=True, text=True)
+        try:
+            result = subprocess.run([*cmd, "--", text], capture_output=True, text=True)
+        except FileNotFoundError:
+            raise EngineError("say: command not found; the say engine needs macOS")
         if result.returncode != 0:
             raise EngineError(f"say failed: {result.stderr.strip()}")

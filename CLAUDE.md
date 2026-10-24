@@ -15,7 +15,10 @@ uv run dreame-voice new <voice> --engine <say|piper|xtts>
 uv run dreame-voice list
 uv run dreame-voice generate <voice> [--only ID ...]
 uv run dreame-voice install <voice> --robot <host>   # or DREAME_ROBOT=<host>
+docker build -t dreame-voice .   # entrypoint is dreame-voice; volumes /app/build, /app/models
 ```
+
+`.github/workflows/docker.yml` tests, smoke-tests and pushes `ghcr.io/awfulwoman/dreame` (amd64+arm64). The image is piper-only (`say` is macOS-only; `EXTRAS` build arg adds xtts) and ships only `archive/sounds.csv` + `archive/audio/firmware/` (see `.dockerignore`). `install` in a container needs `--network host`.
 
 ## Architecture
 
