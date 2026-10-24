@@ -1,6 +1,7 @@
 import gzip
 import hashlib
 import io
+import os
 import tarfile
 from pathlib import Path
 
@@ -27,7 +28,10 @@ def build_pack(audio_dir: Path, pack_path: Path, md5_path: Path) -> str:
 
     pack_path.parent.mkdir(parents=True, exist_ok=True)
     data = gzip.compress(buf.getvalue(), mtime=0)
-    pack_path.write_bytes(data)
+    # Write then rename: the service may be serving the old pack meanwhile
+    tmp = pack_path.with_name(pack_path.name + ".part")
+    tmp.write_bytes(data)
+    os.replace(tmp, pack_path)
     digest = hashlib.md5(data).hexdigest()
     md5_path.write_text(digest + "\n")
     return digest

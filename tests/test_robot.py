@@ -6,7 +6,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import pytest
 
-from dreame_voice.robot import InstallError, install_pack
+from dreame_voice.robot import InstallError, _PackServer, install_pack
 
 ENDPOINT = "/api/v2/robot/capabilities/VoicePackManagementCapability"
 
@@ -180,3 +180,27 @@ def test_valetudo_calls_go_through_curl_not_python_sockets(valetudo, pack, monke
     path, digest = pack
     install_pack(path, digest, "BEEP", valetudo.host, serve_host="127.0.0.1", poll_interval=0.05)
     assert valetudo.language == "beep"
+
+
+def test_request_install_uses_given_url_and_waits_for_download(valetudo, pack):
+    from dreame_voice.robot import request_install
+
+    path, digest = pack
+    with _PackServer(path, "127.0.0.1") as server:
+        request_install(server.url, digest, "BEEP", valetudo.host,
+                        downloaded=lambda: server.downloads > 0, poll_interval=0.05)
+
+    assert valetudo.language == "beep"
+    assert valetudo.requests[0]["url"] == server.url
+
+
+def test_request_install_waits_while_robot_still_reports_old_language(valetudo, pack, monkeypatch):
+    # Reinstalling the current voice: idle + same language is not success until the pack was fetched
+    from dreame_voice.robot import request_install
+
+    path, digest = pack
+    valetudo.language = "beep"
+    monkeypatch.setattr(valetudo, "_download", lambda payload: None)
+    with pytest.raises(InstallError, match="Timed out"):
+        request_install("http://127.0.0.1:1/beep.tar.gz", digest, "BEEP", valetudo.host,
+                        downloaded=lambda: False, poll_interval=0.05, timeout=0.3)

@@ -15,17 +15,19 @@ uv run dreame-voice new <voice> --engine <say|piper|xtts>
 uv run dreame-voice list
 uv run dreame-voice generate <voice> [--only ID ...]
 uv run dreame-voice install <voice> --robot <host>   # or DREAME_ROBOT=<host>
-docker build -t dreame-voice .   # entrypoint is dreame-voice; volumes /app/build, /app/models
+uv run dreame-voice serve        # needs DREAME_API_TOKEN, DREAME_PUBLIC_URL; DREAME_ROBOT for installs
+DREAME_API_TOKEN=dev docker compose up --build   # image runs `serve`; volumes /app/build, /app/models
 ```
 
-`.github/workflows/docker.yml` tests, smoke-tests and pushes `ghcr.io/awfulwoman/dreame` (amd64+arm64). The image is piper-only (`say` is macOS-only; `EXTRAS` build arg adds xtts) and ships only `archive/sounds.csv` + `archive/audio/firmware/` (see `.dockerignore`). `install` in a container needs `--network host`.
+`.github/workflows/docker.yml` tests, smoke-tests and pushes `ghcr.io/awfulwoman/dreame` (amd64+arm64). The image is piper-only (`say` is macOS-only; `EXTRAS` build arg adds xtts) and ships only `archive/sounds.csv` + `archive/audio/firmware/` (see `.dockerignore`). The CLI's `install` in a container would need `--network host`; the service instead gives the robot `DREAME_PUBLIC_URL/packs/<name>.tar.gz` (deployed behind the reverse proxy at `https://voicepacks.{{ domainname_infra }}`).
 
 ## Architecture
 
 - `archive/` is read-only reference: `archive/sounds.csv` (ID → manufacturer text) defines which IDs exist; `archive/audio/{xiaomi,firmware}/` are copyrighted manufacturer files kept for research. Everything else is generated into `build/` (gitignored).
 - `voices/<name>.yaml` holds engine + `lines`, one per ID, each either text (spoken) or `{file: path}` (converted as-is). `config.load_voice` rejects missing/unknown IDs against the archive and returns a `Voice` that owns all derived paths. `new.render_voice` writes a starter file with the original text as comments.
 - `generate.py`: lines → engine (`synthesize(text, wav_path)`, created lazily) or file → `audio.to_ogg` → `pack.build_pack`. Engines are registered in `engines.ENGINES`; heavy deps (piper, torch) are imported lazily. Tests swap in a fake engine via `monkeypatch.setitem(engines.ENGINES, "fake", ...)`.
-- `robot.py`: serves the pack over a temporary HTTP server and installs via Valetudo's VoicePackManagementCapability. Valetudo calls use `curl` because macOS Local Network privacy blocks Python from reaching LAN hosts here.
+- `robot.py`: `request_install` tells Valetudo's VoicePackManagementCapability to fetch a URL and polls until done; `install_pack` (CLI) wraps it with a temporary HTTP server. Valetudo calls use `curl` because macOS Local Network privacy blocks Python from reaching LAN hosts here.
+- `service.py`: Starlette app (`create_app(Settings)`). Serves packs unauthenticated (the robot's wget sends no headers), POST generate/install need the Bearer token and run as one background job at a time (`GET /job`). Startup regenerates packs whose `build/<name>.source` (voice file SHA-256) is stale. Packs are written atomically since they're served while regenerating.
 
 Gotchas:
 - Audio conversion uses `soundfile` + `soxr`, not ffmpeg (Homebrew ffmpeg lacks libvorbis). Output matches the manufacturer files: Ogg Vorbis, mono, 16 kHz.

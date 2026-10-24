@@ -1,0 +1,25 @@
+# Local development: build and run the real image.
+#   DREAME_API_TOKEN=dev docker compose up --build
+name: dreame-voice
+services:
+  dreame-voice:
+    build:
+      context: .
+      args:
+        APP_VERSION: dev
+    image: dreame-voice:dev
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DREAME_API_TOKEN: ${DREAME_API_TOKEN:?set DREAME_API_TOKEN}
+      DREAME_PUBLIC_URL: ${DREAME_PUBLIC_URL:-http://localhost:8000}
+      DREAME_ROBOT: ${DREAME_ROBOT:-}
+    volumes:
+      - build:/app/build
+      - models:/app/models
+    read_only: true
+    tmpfs:
+      - /tmp
+volumes:
+  build:
+  models:

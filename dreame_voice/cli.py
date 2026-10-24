@@ -96,3 +96,24 @@ def install(root, name, robot, serve_host, yes):
     except InstallError as e:
         raise click.ClickException(str(e))
     click.echo(f"Installed {name} as language {voice.language_id.lower()}")
+
+
+@main.command()
+@click.option("--host", default="0.0.0.0", show_default=True, help="Address to listen on.")
+@click.option("--port", envvar="PORT", default=8000, show_default=True, help="Port. Env: PORT.")
+@click.pass_obj
+def serve(root, host, port):
+    """Serve packs over HTTP, and generate and install them on request.
+
+    Needs DREAME_API_TOKEN and DREAME_PUBLIC_URL; DREAME_ROBOT enables installs.
+    """
+    import uvicorn
+
+    from .service import Settings, create_app
+
+    try:
+        settings = Settings.from_env(root)
+    except ConfigError as e:
+        raise click.ClickException(str(e))
+    uvicorn.run(create_app(settings), host=host, port=port, proxy_headers=True,
+                forwarded_allow_ips="*")

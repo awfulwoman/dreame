@@ -13,6 +13,7 @@ Everything else derives from the voice name:
   build/<name>/<id>.ogg   generated audio
   build/<name>.tar.gz     pack for the robot
   build/<name>.md5        its MD5, which the robot checks
+  build/<name>.source     SHA-256 of the voice file the pack was built from
 """
 
 from dataclasses import dataclass, field
@@ -57,6 +58,14 @@ class Voice:
     @property
     def md5_path(self) -> Path:
         return self.root / "build" / f"{self.name}.md5"
+
+    @property
+    def source_path(self) -> Path:
+        return self.root / "voices" / f"{self.name}.yaml"
+
+    @property
+    def stamp_path(self) -> Path:
+        return self.root / "build" / f"{self.name}.source"
 
 
 def voice_names(root: Path) -> list[str]:

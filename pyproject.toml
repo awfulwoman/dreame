@@ -9,6 +9,8 @@ dependencies = [
     "soundfile>=0.13",
     "soxr>=0.5",
     "numpy>=2",
+    "starlette>=0.40",
+    "uvicorn>=0.30",
 ]
 
 [project.optional-dependencies]
@@ -17,6 +19,7 @@ xtts = ["coqui-tts>=0.28"]
 
 [dependency-groups]
 dev = [
+    "httpx2>=2.16.0",
     "pytest>=8",
 ]
 

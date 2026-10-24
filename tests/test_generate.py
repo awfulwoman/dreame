@@ -89,3 +89,22 @@ def test_cli_list(project):
     result = CliRunner().invoke(main, ["--root", str(project), "list"])
     assert result.exit_code == 0, result.output
     assert "beep" in result.output and "fake" in result.output
+
+
+def test_pack_is_current_only_after_full_generate_of_same_voice_file(project, monkeypatch):
+    from dreame_voice.generate import pack_is_current
+
+    use_fake(monkeypatch)
+    voice = load_voice(project, "beep")
+    assert not pack_is_current(voice)
+
+    generate(voice, only={"0"})
+    assert not pack_is_current(voice)
+
+    generate(voice)
+    assert pack_is_current(voice)
+
+    (project / "voices" / "beep.yaml").write_text(
+        (project / "voices" / "beep.yaml").read_text().replace("I'm done.", "Done.")
+    )
+    assert not pack_is_current(load_voice(project, "beep"))

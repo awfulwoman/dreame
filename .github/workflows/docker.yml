@@ -58,10 +58,20 @@ jobs:
           cache-to: type=gha,mode=max
 
       # Line 0 is a file line: exercises audio conversion and packing without a model download
-      - name: Smoke test
+      - name: Smoke test CLI
         run: |
           docker run --rm dreame-voice:smoke list
           docker run --rm dreame-voice:smoke generate glados --only 0
+
+      - name: Smoke test service
+        run: |
+          docker run -d --name smoke -p 8000:8000 -e DREAME_API_TOKEN=smoke \
+            -e DREAME_PUBLIC_URL=http://localhost:8000 -e DREAME_GENERATE_ON_START=false \
+            dreame-voice:smoke
+          for i in $(seq 30); do curl -fsS localhost:8000/health && break; sleep 1; done
+          curl -fsS localhost:8000/voices | grep -q '"name":"glados"'
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST localhost:8000/voices/glados/install)" = 401
+          docker rm -f smoke
 
       - name: Log in to GitHub Container Registry
         if: github.event_name != 'pull_request'

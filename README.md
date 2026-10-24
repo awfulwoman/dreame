@@ -33,17 +33,41 @@ uv run dreame-voice install glados --robot 192.168.1.102  # or set DREAME_ROBOT
 uv run pytest
 ```
 
+### Service
+
+`dreame-voice serve` runs an HTTP service for a reverse proxy, such as `https://voicepacks.example`. It serves every pack all the time. When it starts, it generates each pack that is missing or older than its voice file.
+
+| Endpoint | Auth | |
+|---|---|---|
+| `GET /health` | | |
+| `GET /voices` | | Each voice, whether its pack is current, its MD5 and public URL |
+| `GET /packs/<name>.tar.gz` | | The pack. The robot downloads this |
+| `POST /voices/<name>/generate` | token | Regenerate in the background |
+| `POST /voices/<name>/install` | token | Install on the robot in the background |
+| `GET /job` | | The current or last background job, with its log |
+
+One job runs at a time; a second gets `409`. Send the token as `Authorization: Bearer <token>`.
+
+| Variable | |
+|---|---|
+| `DREAME_API_TOKEN` | Required. Token for the `POST` endpoints |
+| `DREAME_PUBLIC_URL` | Required. The URL the robot downloads packs from, for example `https://voicepacks.example` |
+| `DREAME_ROBOT` | Valetudo `host[:port]`. Without it, install gives `503` |
+| `DREAME_GENERATE_ON_START` | `false` to skip generating at start |
+| `PORT` | Default `8000` |
+
+The robot must resolve the public URL's host name through its DNS server, 192.168.1.1. Its `wget` accepts Let's Encrypt certificates.
+
 ### Docker
 
-The image `ghcr.io/awfulwoman/dreame` has the `piper` engine, `archive/sounds.csv`, the firmware startup and shutdown sounds, and `voices/`. The `say` engine needs macOS, so it does not work in the image. Build with `--build-arg EXTRAS="piper xtts"` to add XTTS.
+The image `ghcr.io/awfulwoman/dreame` runs the service. It has the `piper` engine, `archive/sounds.csv`, the firmware startup and shutdown sounds, and `voices/`. The `say` engine needs macOS, so voices that use it fail in the image. Build with `--build-arg EXTRAS="piper xtts"` to add XTTS.
 
 ```sh
-docker build -t dreame-voice .
-docker run --rm -v dreame-models:/app/models -v dreame-build:/app/build dreame-voice generate glados
-docker run --rm -it --network host -v dreame-build:/app/build dreame-voice install glados --robot 192.168.1.102
+DREAME_API_TOKEN=dev docker compose up --build
+curl -X POST -H "Authorization: Bearer dev" localhost:8000/voices/glados/install
 ```
 
-Keep `/app/models` (downloaded Piper models) and `/app/build` (packs) on volumes. `install` needs `--network host`, because the robot downloads the pack from the container. Add `--yes` when there is no terminal. Mount a directory on `/app/voices` to use voice files that are not in the image.
+Keep `/app/models` (downloaded Piper models) and `/app/build` (packs) on volumes. Mount a directory on `/app/voices` to use voice files that are not in the image. The CLI also works in the image, for example `docker run --rm dreame-voice list`.
 
 ### Voice files
 

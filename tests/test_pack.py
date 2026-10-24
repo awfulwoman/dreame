@@ -1,6 +1,8 @@
 import hashlib
 import tarfile
 
+import pytest
+
 from dreame_voice.pack import build_pack
 
 
@@ -31,3 +33,24 @@ def test_pack_is_reproducible(tmp_path):
     (audio / "0.ogg").touch()
     second = build_pack(audio, tmp_path / "b.tar.gz", tmp_path / "b.md5")
     assert first == second
+
+
+def test_pack_is_written_atomically(tmp_path, monkeypatch):
+    # The service serves packs while regenerating them: the old pack stays whole until the new one is complete
+    import os
+
+    from dreame_voice.pack import build_pack
+
+    audio = tmp_path / "audio"
+    audio.mkdir()
+    (audio / "0.ogg").write_bytes(b"x")
+    pack = tmp_path / "beep.tar.gz"
+    pack.write_bytes(b"old pack")
+
+    def interrupted(src, dst):
+        raise OSError("interrupted")
+
+    monkeypatch.setattr(os, "replace", interrupted)
+    with pytest.raises(OSError):
+        build_pack(audio, pack, tmp_path / "beep.md5")
+    assert pack.read_bytes() == b"old pack"

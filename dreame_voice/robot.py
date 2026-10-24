@@ -1,7 +1,8 @@
 """Install a voice pack through Valetudo's VoicePackManagementCapability.
 
 Valetudo has no upload: it tells the robot a URL, a language and an MD5, and the robot
-downloads the pack itself. So we serve the pack from this machine for the duration.
+downloads the pack itself. The CLI serves the pack from this machine for the duration;
+the service serves it all the time, at its public URL.
 
 On the Dreame L10 Pro the install empties /data/personalized_voice/ first, so the robot
 only ever holds one custom voice.
@@ -15,6 +16,7 @@ import time
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from typing import Callable
 
 ENDPOINT = "/api/v2/robot/capabilities/VoicePackManagementCapability"
 
@@ -82,28 +84,41 @@ def get_status(robot_host: str) -> dict:
     return json.loads(_request("GET", f"http://{robot_host}{ENDPOINT}"))
 
 
+def request_install(url: str, md5: str, language_id: str, robot_host: str,
+                    downloaded: Callable[[], bool], timeout: float = 120,
+                    poll_interval: float = 2, log=print) -> None:
+    """Tell the robot to download the pack at `url`, and wait until it uses it.
+
+    `downloaded` says whether the robot has fetched the pack yet: if the robot already
+    uses this language, "idle" alone doesn't mean the new pack is installed.
+    """
+    language = language_id.lower()
+    api = f"http://{robot_host}{ENDPOINT}"
+    _request("PUT", api, {"action": "download", "url": url,
+                          "language": language, "hash": md5})
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        time.sleep(poll_interval)
+        status = get_status(robot_host)
+        state = status.get("operationStatus", {}).get("type")
+        log(f"  {state} {status.get('operationStatus', {}).get('progress', '')}".rstrip())
+        if state == "error":
+            raise InstallError("Robot reported an error; check the MD5 and that it can reach " + url)
+        if (state == "idle" and downloaded()
+                and str(status.get("currentLanguage", "")).lower() == language):
+            return
+    raise InstallError(f"Timed out after {timeout}s waiting for the robot to install the pack")
+
+
 def install_pack(pack: Path, md5: str, language_id: str, robot_host: str,
                  serve_host: str | None = None, timeout: float = 120,
                  poll_interval: float = 2, log=print) -> None:
-    language = language_id.lower()
+    """Serve the pack from this machine while the robot installs it."""
     serve_host = serve_host or local_address_for(robot_host)
-    api = f"http://{robot_host}{ENDPOINT}"
-
     get_status(robot_host)  # fail early if Valetudo isn't there
 
     with _PackServer(pack, serve_host) as server:
         log(f"Serving {server.url}")
-        _request("PUT", api, {"action": "download", "url": server.url,
-                              "language": language, "hash": md5})
-        deadline = time.monotonic() + timeout
-        while time.monotonic() < deadline:
-            time.sleep(poll_interval)
-            status = get_status(robot_host)
-            state = status.get("operationStatus", {}).get("type")
-            log(f"  {state} {status.get('operationStatus', {}).get('progress', '')}".rstrip())
-            if state == "error":
-                raise InstallError("Robot reported an error; check the MD5 and that it can reach " + server.url)
-            if (state == "idle" and server.downloads
-                    and str(status.get("currentLanguage", "")).lower() == language):
-                return
-        raise InstallError(f"Timed out after {timeout}s waiting for the robot to install the pack")
+        request_install(server.url, md5, language_id, robot_host,
+                        downloaded=lambda: server.downloads > 0,
+                        timeout=timeout, poll_interval=poll_interval, log=log)
