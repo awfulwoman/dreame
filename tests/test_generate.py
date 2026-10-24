@@ -108,3 +108,36 @@ def test_pack_is_current_only_after_full_generate_of_same_voice_file(project, mo
         (project / "voices" / "beep.yaml").read_text().replace("I'm done.", "Done.")
     )
     assert not pack_is_current(load_voice(project, "beep"))
+
+
+def test_pack_goes_stale_when_the_variants_rotate(project, monkeypatch):
+    from datetime import date
+
+    from dreame_voice.generate import pack_is_current
+
+    use_fake(monkeypatch)
+    (project / "voices" / "beep.yaml").write_text((project / "voices" / "beep.yaml").read_text().replace(
+        "  13: I'm done. Going back home to charge.\n", "  13:\n    - Going home.\n    - Back to the dock.\n"))
+    today = date(2026, 1, 1)
+    voice = load_voice(project, "beep", on=today)
+    generate(voice)
+    assert pack_is_current(voice)
+    assert not pack_is_current(load_voice(project, "beep", on=voice.next_change))
+
+
+def test_cli_generate_for_another_date(project, monkeypatch):
+    fake = use_fake(monkeypatch)
+    (project / "voices" / "beep.yaml").write_text((project / "voices" / "beep.yaml").read_text().replace(
+        "  13: I'm done. Going back home to charge.\n", "  13:\n    - Going home.\n    - Back to the dock.\n"))
+    for day in ("2026-01-01", "2026-01-04"):
+        result = CliRunner().invoke(main, ["--root", str(project), "generate", "beep", "--date", day])
+        assert result.exit_code == 0, result.output
+    assert sorted(fake.spoken) == ["Back to the dock.", "Going home."]
+
+
+def test_cli_list_shows_variants_and_next_change(project, monkeypatch):
+    (project / "voices" / "beep.yaml").write_text((project / "voices" / "beep.yaml").read_text().replace(
+        "  13: I'm done. Going back home to charge.\n", "  13:\n    - Going home.\n    - Back to the dock.\n"))
+    result = CliRunner().invoke(main, ["--root", str(project), "list"])
+    assert "1 with variants" in result.output
+    assert "next change" in result.output

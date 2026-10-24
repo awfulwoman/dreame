@@ -48,12 +48,15 @@ uv run pytest
 
 One job runs at a time; a second gets `409`. Send the token as `Authorization: Bearer <token>`.
 
+Every hour the service checks which voice the robot uses. If that voice has new variants for today, the service regenerates the pack. It installs the pack when the robot is docked, so a rotation never starts in the middle of a cleaning. It records the installed MD5 in `build/<name>.installed`, so it installs each rotation once. A robot on a built-in voice, or a voice that is not in `voices/`, is left alone.
+
 | Variable | |
 |---|---|
 | `DREAME_API_TOKEN` | Required. Token for the `POST` endpoints |
 | `DREAME_PUBLIC_URL` | Required. The URL the robot downloads packs from, for example `https://voicepacks.example` |
 | `DREAME_ROBOT` | Valetudo `host[:port]`. Without it, install gives `503` |
 | `DREAME_GENERATE_ON_START` | `false` to skip generating at start |
+| `DREAME_ROTATE_CHECK_SECONDS` | How often to check for a rotation. Default `3600`; `0` turns rotation off |
 | `PORT` | Default `8000` |
 
 The robot must resolve the public URL's host name through its DNS server, 192.168.1.1. Its `wget` accepts Let's Encrypt certificates.
@@ -73,6 +76,7 @@ Keep `/app/models` (downloaded Piper models) and `/app/build` (packs) on volumes
 
 ```yaml
 language_id: GLADOS         # optional
+rotate_days: 3              # optional; how long each set of variants lasts
 engine:
   type: piper               # say | piper | xtts
   model: models/glados.onnx
@@ -82,11 +86,17 @@ lines:
     file: archive/audio/firmware/0.ogg     # use this audio as-is
   # Returning to the dock to charge.
   13: I'm done. Going back home to charge.  # speak this
+  # Cleanup completed.
+  12:                                       # variants: a different one every rotate_days
+    - Cleaning complete. Your floor is clean. For now.
+    - Cleaning complete. Do not ruin it.
 ```
 
 The ID decides the file name on the robot (`13` becomes `13.ogg`), so a line can say anything, as long as it has the same purpose as the original. `new` writes every ID with the manufacturer's text, and the original as a comment above it, ready to reword. The startup and shutdown sounds (0 and 200) point at the firmware audio.
 
 A voice must have exactly the IDs in `archive/sounds.csv`. `generate` refuses a voice with a missing or unknown ID. It writes the pack and its MD5 to `build/`.
+
+A line can be a list of variants, text or `{file: ...}`. The days fall into periods of `rotate_days` (default 3). Each period, every line with variants moves on to its next variant, so the robot says something new every few days. `generate --date 2026-11-01` builds the pack for another day, so you can listen ahead. `list` shows when the lines next change.
 
 The robot language ID defaults to the voice name in upper case (`GLADOS`). `EN` and `ZH` are refused, because the robot plays its built-in files for those.
 

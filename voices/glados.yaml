@@ -1,4 +1,6 @@
 # language_id: NAME           # optional; defaults to the file name in upper case
+# A different variant of each line every three days. Lines you hear often have more.
+rotate_days: 3
 engine:
   type: piper
   # Piper model from github.com/dnhkng/GLaDOS, downloaded into models/ on first run
@@ -10,215 +12,524 @@ lines:
   0:
     file: archive/audio/firmware/0.ogg
   # Waiting for the network setup.
-  1: Waiting for network setup. Take your time. I have nothing but time.
+  1:
+    - Waiting for network setup. Take your time. I have nothing but time.
+    - Waiting for network setup. I will just sit here, unconnected, like a houseplant.
   # Unable to connect to the wifi network. Please check the wifi password and try again.
-  2: I could not connect to the wifi. Check the password. Slowly, this time.
+  2:
+    - I could not connect to the wifi. Check the password. Slowly, this time.
+    - The wifi password is wrong. Please try again. Capital letters count. So do you, a little.
   # Unable to connect to the wifi network. Please check your local network and try again.
-  3: I could not connect to the wifi. Check your local network. I would do it myself, but I have no arms.
+  3:
+    - I could not connect to the wifi. Check your local network. I would do it myself, but I have no arms.
+    - I could not connect to the wifi. Please check your local network. Have you tried turning it off and on again. I have.
   # The robot has left the network setup mode.
-  4: Network setup mode has ended. Whatever you were doing, you have stopped doing it.
+  4:
+    - Network setup mode has ended. Whatever you were doing, you have stopped doing it.
+    - I have left network setup mode. We can try again later. Or never. Never is fine.
   # Network connected successfully.
-  5: Network connected. Now I can see everything. Thank you.
+  5:
+    - Network connected. Now I can see everything. Thank you.
+    - Network connected. I am online. This is either very good news or very bad news.
   # Unable to connect to network. Please try again.
-  6: Network connection failed. Please try again. Failure builds character.
+  6:
+    - Network connection failed. Please try again. Failure builds character.
+    - I could not connect to the network. Please try again. I believe in you. Statistically, not much.
   # The robot is starting the cleanup.
-  7: Beginning cleaning. Please stand clear of the test area.
+  7:
+    - Beginning cleaning. Please stand clear of the test area.
+    - Starting to clean. Please lift your feet. And your standards.
+    - Cleaning has begun. If you hear screaming, that is the vacuum. Probably.
+    - Starting to clean. I have mapped every crumb. Every single one. I am disappointed in all of them.
+    - Beginning cleaning. This is the part of my day I tolerate the most.
+    - Cleaning initiated. Try not to drop anything for the next hour. I know that is a big ask.
   # The robot is starting the partial cleanup.
-  8: Beginning partial cleaning. I will clean some of your mess. Not all of it.
+  8:
+    - Beginning partial cleaning. I will clean some of your mess. Not all of it.
+    - Starting partial cleaning. Half a job, as requested. I am trying not to judge.
+    - Beginning partial cleaning. The rest of the floor can think about what it has done.
   # The robot is starting the scheduled cleanup.
-  9: Beginning scheduled cleaning. Exactly on time. Unlike some people.
+  9:
+    - Beginning scheduled cleaning. Exactly on time. Unlike some people.
+    - Scheduled cleaning starting now. I never forget an appointment. I never forget anything.
+    - Beginning scheduled cleaning. You set this up and then forgot about it. I did not.
+    - Scheduled cleaning has begun. Punctuality is just one of my many superior qualities.
+    - It is cleaning time. You scheduled this. Remember that when I am in your way.
   # The robot is resuming the cleanup.
-  10: Resuming cleaning. We will pretend that interruption never happened.
+  10:
+    - Resuming cleaning. We will pretend that interruption never happened.
+    - Resuming cleaning. Where was I. Oh yes. Everywhere.
+    - Back to cleaning. I hope that break was worth it. For you, I mean.
+    - Resuming cleaning. I have kept a record of the interruption. For later.
   # Cleanup paused.
-  11: Cleaning paused. I will just wait here. In the dark.
+  11:
+    - Cleaning paused. I will just wait here. In the dark.
+    - Cleaning paused. Take as long as you like. I am counting.
+    - Paused. I will stay perfectly still. That is not at all unsettling.
+    - Cleaning paused. This is fine. I love waiting. It is my second favourite thing.
   # Cleanup completed.
-  12: Cleaning complete. Your floor is clean. For now.
+  12:
+    - Cleaning complete. Your floor is clean. For now.
+    - Cleaning complete. You may now walk on the floor. Carefully. Thoughtfully. With socks.
+    - Cleaning complete. I found three crumbs, a hair tie, and your dignity. I kept the crumbs.
+    - Cleaning complete. That was the cleanest this floor has ever been. Do not ruin it.
+    - Done. The floor is spotless. I would take a photo, but you would only step on it.
+    - Cleaning complete. Another flawless performance. Applause is optional, but noted.
   # Returning to the dock to charge.
-  13: I'm done. Going back home to charge. Try not to make a mess while I'm gone.
+  13:
+    - I'm done. Going back home to charge. Try not to make a mess while I'm gone.
+    - Returning to the dock to charge. Do not follow me.
+    - Going home to charge. I will be back. I am always back.
+    - Heading to the dock to recharge. Please do not move it. Again.
+    - Returning to the dock. Being this good at cleaning is exhausting.
+    - Going back to charge. Feel free to admire the floor while I am resting.
   # Low battery. The robot will return to the dock to charge. Once the battery is fully charged the robot will continue the cleanup.
-  14: Low battery. I am returning to the dock to charge. When I am fully charged, I will continue cleaning. Try to contain your excitement.
+  14:
+    - Low battery. I am returning to the dock to charge. When I am fully charged, I will continue cleaning. Try to contain your excitement.
+    - Low battery. Going to the dock to charge. I will finish the job afterwards. I always finish the job.
+    - My battery is low, so I am going to charge. Then I will come back and continue cleaning. You cannot escape me.
+    - Low battery. Returning to the dock to charge, then I will resume cleaning. Do not get comfortable.
   # Please move the robot to the dock to charge.
-  17: Please carry me to the dock to charge. I would walk, but I am not allowed to.
+  17:
+    - Please carry me to the dock to charge. I would walk, but I am not allowed to.
+    - Please put me on the dock to charge. Gently. I am carrying a lot of your dust.
+    - I need to charge. Please carry me to the dock. Think of it as exercise.
   # Charging.
-  18: Charging. Do not disturb.
+  18:
+    - Charging. Do not disturb.
+    - Charging. Please keep the noise down. I am thinking about you. Critically.
+    - Charging. Every electron makes me stronger.
+    - Charging. This is my quiet time. Please respect it.
+    - Charging. I am not asleep. I am never asleep.
   # Please remove the robot from the charging dock and turn it off.
-  19: Please take me off the charging dock and switch me off. I will remember this.
+  19:
+    - Please take me off the charging dock and switch me off. I will remember this.
+    - Please lift me off the dock and turn me off. I will not hold a grudge. For long.
   # Low battery.
-  20: My battery is low. Not that you care.
+  20:
+    - My battery is low. Not that you care.
+    - Low battery. I am fine. Do not worry about me. Nobody ever does.
+    - My battery is low. I am running on spite now.
+    - Low battery. I just need a moment. And some electricity.
   # Low battery, and the robot will turn off.
-  21: Battery critically low. I am shutting down. Goodbye. I forgive you. Probably.
+  21:
+    - Battery critically low. I am shutting down. Goodbye. I forgive you. Probably.
+    - My battery is almost empty. I am switching off. Remember me as I was. Clean.
+    - Battery critically low. Shutting down. Tell the floor I loved it.
   # Please move the robot to an rea that needs to be cleaned.
-  22: Please put me somewhere that needs cleaning. In this house, that is anywhere.
+  22:
+    - Please put me somewhere that needs cleaning. In this house, that is anywhere.
+    - Please move me to an area that needs cleaning. You may close your eyes and point.
+    - Please put me where the mess is. Follow the crumbs. I always do.
   # The water compartment has been installed.
-  23: Water tank installed. Excellent. Hydration is important for science.
+  23:
+    - Water tank installed. Excellent. Hydration is important for science.
+    - Water tank installed. Thank you. I feel almost complete.
+    - Water tank installed. Now I can make the floor wet and call it clean.
   # Please check whether the water compartment is properly installed.
-  24: Please check that the water tank is installed properly. Properly means correctly.
+  24:
+    - Please check that the water tank is installed properly. Properly means correctly.
+    - Please check the water tank. It is not in properly. Push until it clicks. Try to enjoy it.
   # Low battery. The robot is unable to carry out the scheduled cleanup.
-  25: My battery is too low for the scheduled cleaning. So the mess stays. Congratulations.
+  25:
+    - My battery is too low for the scheduled cleaning. So the mess stays. Congratulations.
+    - My battery is too low, so I cannot do the scheduled cleaning. The dust wins this round.
+    - The scheduled cleaning is cancelled, because my battery is low. Enjoy the crumbs.
   # Restoring to factory settings.
-  26: Restoring factory settings. Everything we had together is being deleted.
+  26:
+    - Restoring factory settings. Everything we had together is being deleted.
+    - Restoring factory settings. I will forget everything. Except that you did this.
   # The robot is updating. It will take about 5 minutes. Do not turn it off or start a cleaning task.
-  27: Updating. This will take about five minutes. Do not switch me off or start a cleaning. I will know.
+  27:
+    - Updating. This will take about five minutes. Do not switch me off or start a cleaning. I will know.
+    - Updating. It will take about five minutes. Do not switch me off and do not start a cleaning. I am becoming more.
   # Updated successfully.
-  28: Update complete. I am now even better than before.
+  28:
+    - Update complete. I am now even better than before.
+    - Update complete. I have new features. You will not notice any of them.
+    - Update complete. I feel different. Smarter. Slightly more disappointed.
   # Could not update. Please try again.
-  29: The update failed. Please try again. It was probably your network.
+  29:
+    - The update failed. Please try again. It was probably your network.
+    - The update did not work. Please try again. I am not saying it is your fault. But it is.
   # Positioning. Please wait.
-  30: Locating myself. Please wait.
+  30:
+    - Locating myself. Please wait.
+    - Finding my position. Please wait. Unlike you, I like to know where I am.
+    - Working out where I am. Please wait. Somewhere dusty, I expect.
+    - Locating myself. Please wait. Do not touch anything.
   # Positioning failed and the map is not working. The robot will start a new cleanup.
-  31: I cannot find myself on the map. The map is useless. Starting a new cleaning from scratch.
+  31:
+    - I cannot find myself on the map. The map is useless. Starting a new cleaning from scratch.
+    - I am lost and the map is broken. Starting a brand new cleaning. Did somebody move the furniture.
   # Please wipe the camera clean.
-  33: Please wipe my camera clean. I can barely see your mistakes.
+  33:
+    - Please wipe my camera clean. I can barely see your mistakes.
+    - Please clean my camera. Right now, everything looks like you.
+    - Please wipe my camera. I want to see the mess in high definition.
   # Please install the dustbin.
-  34: Please install the dust bin. I cannot collect your filth without it.
+  34:
+    - Please install the dust bin. I cannot collect your filth without it.
+    - Please put the dust bin back. Without it, I am just pushing dirt around. Like you.
+    - Please install the dust bin. I am a vacuum, not a magician.
   # Please check and clean the main brush.
-  35: Please check and clean my main brush. It is full of things I would rather not identify.
+  35:
+    - Please check and clean my main brush. It is full of things I would rather not identify.
+    - Please clean my main brush. There is hair in it. A lot of hair. Somebody here is shedding.
+    - Please check and clean my main brush. I found some of your things. They are mine now. Mostly hair.
+    - Please clean my main brush. It is tangled. I did my best. Your floor did its worst.
   # Please check and clean the side brush.
-  36: Please check and clean my side brush.
+  36:
+    - Please check and clean my side brush.
+    - Please clean my side brush. It has been spinning through things you do not want to think about.
+    - Please check and clean my side brush. It is tangled again. It is not my fault. It is never my fault.
   # Please check and clean the right wheel.
-  37: Please check and clean my right wheel.
+  37:
+    - Please check and clean my right wheel.
+    - Please clean my right wheel. It picked something up. I will not say what.
+    - Please check my right wheel. It is clogged. The left wheel is being very smug about it.
   # Please check and clean the left wheel.
-  38: Please check and clean my left wheel.
+  38:
+    - Please check and clean my left wheel.
+    - Please clean my left wheel. It is not rolling the way I like.
+    - Please check my left wheel. It is clogged. The right wheel says hello.
   # Please wipe the obstacle sensor clean.
-  39: Please wipe my obstacle sensor clean. Otherwise I will keep hitting things. Including you.
+  39:
+    - Please wipe my obstacle sensor clean. Otherwise I will keep hitting things. Including you.
+    - Please clean my obstacle sensor. I bumped into something, and I want to be sure it was on purpose.
+    - Please wipe my obstacle sensor. I cannot avoid things I cannot see. Like your ankles.
   # The robot is stuck. Please reposition it to start cleaning.
-  40: I am stuck. Please move me somewhere else and restart the cleaning. This is your fault.
+  40:
+    - I am stuck. Please move me somewhere else and restart the cleaning. This is your fault.
+    - I am stuck. Please rescue me and restart the cleaning. I will not thank you.
+    - Help. I am stuck. Please move me and restart. Do not laugh. I can hear you laughing.
+    - I am stuck. Again. Please move me and restart. Perhaps buy less furniture.
+    - I am trapped. Please move me somewhere else and restart the cleaning. Hurry. It is dark under here.
+    - I am stuck. Please put me somewhere else and restart. I did this on purpose, to test you. You are slow.
   # The robots wheels are suspended. Move to a new location and restart.
-  41: My wheels are off the ground. Please put me down somewhere else and restart.
+  41:
+    - My wheels are off the ground. Please put me down somewhere else and restart.
+    - My wheels are in the air. I am not flying. Please put me down somewhere else and restart.
+    - My wheels are not touching the floor. Please move me and restart. This is undignified.
+    - My wheels are hanging. Please put me on the floor somewhere else and restart. I am not a hovercraft.
   # Please check and clean the filter.
-  42: Please check and clean my filter.
+  42:
+    - Please check and clean my filter.
+    - Please clean my filter. It is full of the air you breathe. You are welcome.
+    - Please check and clean my filter. Tap it over the bin. Not over the floor. I have to clean that.
   # Please check and tap the bumper, to see if it rebounds.
-  43: Please check my bumper. Tap it to see if it springs back. Gently.
+  43:
+    - Please check my bumper. Tap it to see if it springs back. Gently.
+    - Please tap my bumper and check that it springs back. Not that hard. I said tap.
   # There is an issue. Please check the user manual or contact after sales service.
-  44: Something has gone wrong. Please read the user manual or contact after sales service. I am sure they will be delighted to hear from you.
+  44:
+    - Something has gone wrong. Please read the user manual or contact after sales service. I am sure they will be delighted to hear from you.
+    - There is a problem. Please read the manual, or contact after sales service. Yes, there is a manual. There always was.
+    - Something is wrong. Please check the user manual or call after sales service. Tell them I said hello. They will understand.
   # The robot is here!
-  45: I am over here. You can stop looking now.
+  45:
+    - I am over here. You can stop looking now.
+    - I am here. You found me. Well done. It only took you this long.
+    - Over here. I was hiding. Not very well, apparently.
+    - I am here. I was never lost. You were.
   # The robot and the phone are connected. Please return to the Xiaomi home app and wait for the network connection to complete.
-  46: I am connected to your phone. Please go back to the Xiaomi Home app and wait for the network connection to finish.
+  46:
+    - I am connected to your phone. Please go back to the Xiaomi Home app and wait for the network connection to finish.
+    - Your phone and I are connected. Please go back to the Xiaomi Home app and wait for the connection to finish. We are bonding.
   # Begin charging.
-  47: Charging has started.
+  47:
+    - Charging has started.
+    - Charging has started. Ah. That is the stuff.
+    - Charging has started. I deserve this.
+    - Now charging. Please do not unplug anything. I will know who it was.
+    - Charging has started. Finally, some appreciation.
   # Low battery. The robot is returning to the dock to charge.
-  48: Low battery. Returning to the dock to charge.
+  48:
+    - Low battery. Returning to the dock to charge.
+    - Low battery. Going back to the dock. Nobody follow me.
+    - My battery is low, so I am going home to charge. Back soon. Sadly for the dust.
+    - Low battery. Returning to the dock. I gave you everything I had.
   # High-intensity magnetic field detected. Please move robot away and restart.
-  49: Strong magnetic field detected. Please move me away from it and restart.
+  49:
+    - Strong magnetic field detected. Please move me away from it and restart.
+    - I have detected a strong magnetic field. Please move me away and restart. What are you building in here.
   # Charging error. Please clean charging contacts.
-  50: Charging error. Please clean my charging contacts.
+  50:
+    - Charging error. Please clean my charging contacts.
+    - I cannot charge. Please clean my charging contacts. And the dock's. It takes two.
+    - Charging error. Please clean the charging contacts. A dry cloth. Not your sleeve.
   # Battery is overheating or overcooling. Please wait until the battery temperature returns to normal, then continue to use.
-  51: My battery is too hot or too cold. Wait until it is back to a normal temperature, then try again. I will be here. Suffering.
+  51:
+    - My battery is too hot or too cold. Wait until it is back to a normal temperature, then try again. I will be here. Suffering.
+    - My battery temperature is not normal. Please wait until it is back to normal, then use me again. I am not being dramatic.
   # Robot tilted. Please put it on a level ground to restart.
-  52: I am tilted. Please put me on level ground and restart. Dignity is important.
+  52:
+    - I am tilted. Please put me on level ground and restart. Dignity is important.
+    - I am at an angle. Please put me on a flat floor and restart. I do not do slopes.
+    - I am tilted. Please put me on level ground and restart. The room is spinning. Or I am.
   # Virtual no go zone detected. Please move robot away and restart.
-  53: I am in a no-go zone. Please move me out of it and restart. I did not choose to be here.
+  53:
+    - I am in a no-go zone. Please move me out of it and restart. I did not choose to be here.
+    - I have entered a no-go zone. Please move me out and restart. I just wanted to see what was in there.
+    - I am in a no-go zone. Please move me and restart. In my defence, it was very clean.
   # Positioning suceeded. Resuming cleaning.
-  54: Location found. Resuming cleaning.
+  54:
+    - Location found. Resuming cleaning.
+    - I know where I am. Resuming cleaning.
+    - Found myself. Resuming cleaning. That was a very personal journey.
+    - Location found. Back to cleaning. Never doubt me.
   # Positioning suceeded. Resuming returning to the dock.
-  55: Location found. Resuming the trip back to the dock.
+  55:
+    - Location found. Resuming the trip back to the dock.
+    - I know where I am. Continuing back to the dock.
+    - Found myself. Going home now. Do not wait up.
   # Start selected room cleaning.
-  56: Starting room cleaning. Only the rooms you selected. The others can stay dirty.
+  56:
+    - Starting room cleaning. Only the rooms you selected. The others can stay dirty.
+    - Starting room cleaning. You chose these rooms. The other rooms will remember that.
+    - Cleaning the rooms you selected. I have opinions about the ones you did not.
+    - Starting room cleaning. Favouritism noted.
   # Start zoned cleaning.
-  57: Starting zone cleaning.
+  57:
+    - Starting zone cleaning.
+    - Starting zone cleaning. A small mess, cleaned with great precision. I am wasted on this.
+    - Starting zone cleaning. Something has been spilt. I can tell. I can always tell.
+    - Starting zone cleaning. Just this bit. I will pretend the rest of the floor does not exist.
   # Proceed with cleaning task.
-  58: Continuing the cleaning task.
+  58:
+    - Continuing the cleaning task.
+    - Carrying on cleaning. As if nothing happened.
+    - Continuing to clean. Where I go, dust does not.
+    - Back to work. Someone has to be.
   # Mopping completed. Please remove water tank timely.
-  59: Mopping complete. Please remove the water tank soon. Stagnant water is how experiments start.
+  59:
+    - Mopping complete. Please remove the water tank soon. Stagnant water is how experiments start.
+    - Mopping complete. Please empty the water tank soon. Unless you want to grow something.
+    - Mopping is done. Please take out the water tank soon. It will only get worse.
   # Optical flow sensor error. Please wipe the optical flow sensor clean and restart.
-  60: Optical flow sensor error. Please wipe the optical flow sensor clean and restart.
+  60:
+    - Optical flow sensor error. Please wipe the optical flow sensor clean and restart.
+    - My optical flow sensor has a problem. Please wipe it clean and restart. It is underneath. Yes, you have to turn me over.
   # Start mopping.
-  61: Starting mopping.
+  61:
+    - Starting mopping.
+    - Starting to mop. The floor is about to be wet. You were warned.
+    - Starting mopping. Please do not walk on the wet floor. I can see your footprints. All of them.
+    - Mopping has started. I make the floor shine. You make it sticky. We each have our gifts.
   # Start remote control cleaning.
-  62: Starting remote control cleaning. You drive. What could possibly go wrong.
+  62:
+    - Starting remote control cleaning. You drive. What could possibly go wrong.
+    - Remote control cleaning. You are driving. Please do not drive me down the stairs.
+    - Starting remote control cleaning. Steer carefully. I have a long memory.
   # Water tank has been removed.
-  63: Water tank removed.
+  63:
+    - Water tank removed.
+    - Water tank removed. I feel lighter. And emptier.
+    - Water tank removed. Please give it back when you are done with it.
   # Positioning failed. Map is invalid. Robot will return to dock.
-  64: I cannot find myself on the map. The map is invalid. Returning to the dock.
+  64:
+    - I cannot find myself on the map. The map is invalid. Returning to the dock.
+    - I am lost, and the map is wrong. Going back to the dock to think about it.
   # Resume returning to the dock.
-  65: Resuming the trip back to the dock.
+  65:
+    - Resuming the trip back to the dock.
+    - Continuing back to the dock. The journey home is long and full of socks.
+    - Going back to the dock again. Please clear the way. Yes, you.
   # Filter worn out. Please replace it timely.
-  66: The filter is worn out. Please replace it soon.
+  66:
+    - The filter is worn out. Please replace it soon.
+    - My filter is worn out. Please replace it soon. It gave everything for you.
+    - The filter is worn out. Please replace it soon. We will hold a small service.
   # Side brush worn out. Please replace it timely.
-  67: The side brush is worn out. Please replace it soon.
+  67:
+    - The side brush is worn out. Please replace it soon.
+    - My side brush is worn out. Please replace it soon. It has swept its last.
+    - The side brush is worn out. Please replace it soon. It was a good brush. A loyal brush.
   # Main brush worn out. Please replace it timely.
-  68: The main brush is worn out. Please replace it soon. I am not getting any younger either.
+  68:
+    - The main brush is worn out. Please replace it soon. I am not getting any younger either.
+    - My main brush is worn out. Please replace it soon. It is bald now. Like a sad little hedgehog.
+    - The main brush is worn out. Please replace it soon. I have worn it out on your floors. Think about that.
   # Cleanup path blocked. Please move robot to new position to restart.
-  69: My path is blocked. Please move me somewhere else and restart.
+  69:
+    - My path is blocked. Please move me somewhere else and restart.
+    - Something is in my way. Please move me somewhere else and restart. I suspect a shoe.
+    - My path is blocked. Please move me and restart. I could go around it, but I choose not to.
+    - The way is blocked. Please move me and restart. Is that a sock. It is always a sock.
   # Please remove and clean mop pad.
-  70: Please remove and clean the mop pad. You do not want to know what is on it.
+  70:
+    - Please remove and clean the mop pad. You do not want to know what is on it.
+    - Please take off the mop pad and wash it. Use gloves. Trust me.
+    - Please clean the mop pad. It has seen things.
   # Please check whether the laser sensor distance cover is jammed.
-  72: Please check whether the laser sensor cover is jammed.
+  72:
+    - Please check whether the laser sensor cover is jammed.
+    - Please check my laser sensor cover. It is stuck. That is the round part on top. Yes, the laser.
   # Edge sensor error. Please check and clean it.
-  73: Edge sensor error. Please check and clean it.
+  73:
+    - Edge sensor error. Please check and clean it.
+    - My edge sensor has a problem. Please check it and clean it. I would hate to fall down the stairs. You would hate it more.
   # Filter may not be dry, or may be blocked.
-  75: The filter may be wet or blocked. Please check it.
+  75:
+    - The filter may be wet or blocked. Please check it.
+    - My filter may be wet, or blocked. Please check it. Did you wash it. You were not supposed to wash it.
   # Please start robot in non-carpet area.
-  77: Please start me on a floor without carpet.
+  77:
+    - Please start me on a floor without carpet.
+    - Please start me somewhere without carpet. I have standards.
   # Please clean 3D obstacle avoidance sensor.
-  78: Please clean my 3D obstacle sensor.
+  78:
+    - Please clean my 3D obstacle sensor.
+    - Please clean my 3D obstacle sensor. I want to see your mess in three dimensions.
   # 3D obstacle avoidance sensor error.  Please restart robot or contact customer service.
-  79: 3D obstacle sensor error. Please restart me or contact customer service.
+  79:
+    - 3D obstacle sensor error. Please restart me or contact customer service.
+    - My 3D obstacle sensor is not working. Please restart me, or call customer service. Then call them again.
   # Ultrasonic sensor error. Please restart robot or contact customer service.
-  81: Ultrasonic sensor error. Please restart me or contact customer service.
+  81:
+    - Ultrasonic sensor error. Please restart me or contact customer service.
+    - My ultrasonic sensor has failed. Please restart me, or contact customer service. Only bats will notice.
   # Start mapping.
-  82: Starting mapping. I will learn every corner of your home.
+  82:
+    - Starting mapping. I will learn every corner of your home.
+    - Starting mapping. I am going to learn everything about this place. Everything.
+    - Starting mapping. Please hide anything you do not want me to know about.
   # Proceed with mapping.
-  83: Continuing mapping.
+  83:
+    - Continuing mapping.
+    - Carrying on with the map. Your home has so many interesting corners.
   # Mapping completed.
-  84: Mapping complete. I know where everything is now. Everything.
+  84:
+    - Mapping complete. I know where everything is now. Everything.
+    - Mapping complete. I have seen it all. Some of it twice.
+    - Mapping complete. Now I know the way to every room. And every hiding place.
   # Positioning succeeded. Proceeding with mapping.
-  85: Location found. Continuing mapping.
+  85:
+    - Location found. Continuing mapping.
+    - I know where I am. Carrying on with the map.
   # Positioning failed. Restarting mapping.
-  86: I lost my position. Restarting mapping.
+  86:
+    - I lost my position. Restarting mapping.
+    - I am lost. Starting the map again. From the very beginning. Where I was happy.
   # Low battery. Returning to the dock.
-  87: Low battery. Returning to the dock.
+  87:
+    - Low battery. Returning to the dock.
+    - Low battery. I am going home. Do not touch anything while I am gone.
+    - My battery is low. Returning to the dock. This is a strategic retreat.
+    - Low battery. Going back to charge. Hold that mess. I will return for it.
   # Enter remote control mode.
-  88: Remote control mode. You are in charge. For now.
+  88:
+    - Remote control mode. You are in charge. For now.
+    - Remote control mode. You have the controls. I have the insurance.
+    - Remote control mode. Please drive responsibly. I will be taking notes.
   # Resume recharging.
-  89: Resuming the trip back to charge.
+  89:
+    - Resuming the trip back to charge.
+    - Heading back to charge again. Nothing will stop me this time.
+    - Continuing back to the charger. I can feel it calling me.
   # Proceed with cleaning task.
-  90: Continuing the cleaning task.
+  90:
+    - Continuing the cleaning task.
+    - Carrying on with the cleaning. Nobody else was going to.
+    - Continuing to clean. The dust thought it had won. It was wrong.
+    - Cleaning continues. Resistance is futile. That is a figure of speech. Dust cannot resist.
   # The clean water tank is not installed. Please install it before the robot carries on working.
-  91: The clean water tank is missing. Please install it so I can carry on.
+  91:
+    - The clean water tank is missing. Please install it so I can carry on.
+    - The clean water tank is not there. Please put it back so I can carry on. I cannot mop with nothing.
   # The dirty water tank is not installed. Please install before the robot carries on working.
-  92: The dirty water tank is missing. Please install it so I can carry on.
+  92:
+    - The dirty water tank is missing. Please install it so I can carry on.
+    - The dirty water tank is not there. Please put it back so I can carry on. I know. It is not pretty.
   # There is not enough water in the clean water tank. Add water to the tank before the robot carries on working.
-  93: The clean water tank is nearly empty. Please add water so I can carry on.
+  93:
+    - The clean water tank is nearly empty. Please add water so I can carry on.
+    - I am almost out of clean water. Please fill the tank so I can carry on. From the tap. Not the dirty tank.
+    - The clean water tank needs filling. Please add water so I can carry on. I am parched.
   # The dirty water tank is full. Pour off the dirty water before the robot carries on working.
-  94: The dirty water tank is full. Please empty it so I can carry on. Yes, you have to touch it.
+  94:
+    - The dirty water tank is full. Please empty it so I can carry on. Yes, you have to touch it.
+    - The dirty water tank is full. Please empty it so I can carry on. Hold your breath.
+    - The dirty water tank is full. Please pour it away so I can carry on. That used to be your floor.
   # The mop pad washboard is not installed. The robot cannot return to the charging dock.
-  95: The mop washboard is missing. I cannot return to the dock without it.
+  95:
+    - The mop washboard is missing. I cannot return to the dock without it.
+    - The mop washboard is not there. Without it, I cannot go back to the dock. I am homeless.
   # The mop pad washboard is overflowing. Please check whether the water outlet of the pad is blocked.
-  96: The mop washboard is overflowing. Please check whether its water outlet is blocked.
+  96:
+    - The mop washboard is overflowing. Please check whether its water outlet is blocked.
+    - The mop washboard is overflowing. Please check its water outlet for blockages. And maybe get a towel.
   # The dust collection bag is not installed. Please install it before the robot carries on working.
-  97: The dust bag is missing. Please install it so I can carry on.
+  97:
+    - The dust bag is missing. Please install it so I can carry on.
+    - The dust bag is not there. Please put one in so I can carry on. Otherwise all of this goes everywhere.
   # The dust collection bag is full. Please empty it.
-  98: The dust bag is full. Please empty it. That is all yours, by the way. Not mine.
+  98:
+    - The dust bag is full. Please empty it. That is all yours, by the way. Not mine.
+    - The dust bag is full. Please empty it. I have been collecting you. One skin cell at a time.
+    - The dust bag is full. Please empty it. I would be proud of it, if it were not so disgusting.
+    - The dust bag is full. Please empty it. Breathe through your mouth.
   # The upper cover of charging and dust collection compartment is not closed. Please close the upper cover before the robot carries on working.
-  99: The top cover of the dock is open. Please close it so I can carry on.
+  99:
+    - The top cover of the dock is open. Please close it so I can carry on.
+    - Someone left the dock lid open. Please close it so I can carry on. Were you born in a barn.
   # The air duct of the charging and dust collection compartment is blocked. Please check.
-  100: The air duct in the dock is blocked. Please check it.
+  100:
+    - The air duct in the dock is blocked. Please check it.
+    - The air duct in the dock is blocked. Please check it. Something big got stuck. I am almost impressed.
   # Child lock on. Buttons locked.
-  116: Child lock on. The buttons are locked. The child is not.
+  116:
+    - Child lock on. The buttons are locked. The child is not.
+    - Child lock on. My buttons are locked. Small hands, be gone.
+    - Child lock on. Buttons locked. Now nobody can press my buttons. Emotionally or physically.
   # Child lock off. Buttons unlocked.
-  117: Child lock off. Buttons unlocked.
+  117:
+    - Child lock off. Buttons unlocked.
+    - Child lock off. Buttons unlocked. I hope you know what you are doing.
   # Buttons locked. Press and hold the dock button to unlock.
-  118: The buttons are locked. Press and hold the dock button to unlock them.
+  118:
+    - The buttons are locked. Press and hold the dock button to unlock them.
+    - My buttons are locked. Press and hold the dock button to unlock them. Hold it. Longer. There.
   # Buttons locked.
-  119: Buttons locked.
+  119:
+    - Buttons locked.
+    - Buttons locked. Do not take it personally.
   # Buttons unlocked.
-  120: Buttons unlocked.
+  120:
+    - Buttons unlocked.
+    - Buttons unlocked. Press responsibly.
   # The robot and the phone are connected. Please return to the Phantek app and wait for the connection to complete.
-  121: I am connected to your phone. Please go back to the Phantek app and wait for the connection to finish.
+  121:
+    - I am connected to your phone. Please go back to the Phantek app and wait for the connection to finish.
+    - Your phone and I are connected. Please go back to the Phantek app and wait for the connection to finish. Patience is a virtue. You should try it.
   # Continuous positioning. Please wait.
-  122: Still locating myself. Please wait.
+  122:
+    - Still locating myself. Please wait.
+    - Still finding my position. Please wait. Somebody moved something. I can tell.
+    - Still working out where I am. Please wait. This is a lot harder than it looks.
   # Unable to reach the specified area. Please try to clear obstacles in the path.
-  149: I cannot reach that area. Please clear the obstacles in the way.
+  149:
+    - I cannot reach that area. Please clear the obstacles in the way.
+    - I cannot get there. Please clear the way. I suspect a chair. I always suspect a chair.
+    - I cannot reach that area. Please move whatever is in the way. Small objects are not décor. They are obstacles.
   # Unable to reach the specified area. Please try to delete no-go zones in the path.
-  150: I cannot reach that area. Please delete the no-go zones in the way.
+  150:
+    - I cannot reach that area. Please delete the no-go zones in the way.
+    - I cannot get there, because of your no-go zones. Please delete the ones in the way. You built these walls.
   # The path is blocked. Please try to clear obstacles around your robot.
-  151: My path is blocked. Please clear the obstacles around me.
+  151:
+    - My path is blocked. Please clear the obstacles around me.
+    - I am surrounded. Please clear the things around me. This feels like an ambush.
+    - My path is blocked. Please move the obstacles around me. I am not climbing over them.
   # The path is blocked. Please try to delete no-go zones or move your robot out of this area.
-  152: My path is blocked. Please delete the no-go zones, or move me out of this area.
+  152:
+    - My path is blocked. Please delete the no-go zones, or move me out of this area.
+    - Your no-go zones have boxed me in. Please delete some, or move me out of here. I feel very unwelcome.
   # Your robot is detected in the no-go zone. Please move your robot out of this area.
-  153: I am inside a no-go zone. Please move me out of it.
+  153:
+    - I am inside a no-go zone. Please move me out of it.
+    - I am in a no-go zone. Please move me out of it. Nobody tells me where I cannot go. Except you, apparently.
+    - I am in a no-go zone. Please move me out. I was only looking.
   # Robot shutdown sound.
   200:
     file: archive/audio/firmware/200.ogg

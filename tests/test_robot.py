@@ -17,6 +17,7 @@ class FakeValetudo:
     def __init__(self, fail_download=False):
         self.language = "glados"
         self.status = "idle"
+        self.state = "docked"
         self.requests = []
         self.fail_download = fail_download
         fake = self
@@ -26,8 +27,12 @@ class FakeValetudo:
                 pass
 
             def do_GET(self):
-                body = json.dumps({"currentLanguage": fake.language,
-                                   "operationStatus": {"type": fake.status, "metaData": {}}}).encode()
+                if self.path.endswith("/robot/state/attributes"):
+                    body = json.dumps([{"__class": "BatteryStateAttribute", "level": 100},
+                                       {"__class": "StatusStateAttribute", "value": fake.state}]).encode()
+                else:
+                    body = json.dumps({"currentLanguage": fake.language,
+                                       "operationStatus": {"type": fake.status, "metaData": {}}}).encode()
                 self.send_response(200)
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
@@ -204,3 +209,11 @@ def test_request_install_waits_while_robot_still_reports_old_language(valetudo, 
     with pytest.raises(InstallError, match="Timed out"):
         request_install("http://127.0.0.1:1/beep.tar.gz", digest, "BEEP", valetudo.host,
                         downloaded=lambda: False, poll_interval=0.05, timeout=0.3)
+
+
+def test_get_state_reads_the_status_attribute(valetudo):
+    from dreame_voice.robot import get_state
+
+    assert get_state(valetudo.host) == "docked"
+    valetudo.state = "cleaning"
+    assert get_state(valetudo.host) == "cleaning"

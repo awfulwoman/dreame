@@ -84,6 +84,15 @@ def get_status(robot_host: str) -> dict:
     return json.loads(_request("GET", f"http://{robot_host}{ENDPOINT}"))
 
 
+def get_state(robot_host: str) -> str:
+    """What the robot is doing: docked, cleaning, returning, error, ..."""
+    attributes = json.loads(_request("GET", f"http://{robot_host}/api/v2/robot/state/attributes"))
+    for attribute in attributes:
+        if attribute.get("__class") == "StatusStateAttribute":
+            return attribute.get("value", "unknown")
+    return "unknown"
+
+
 def request_install(url: str, md5: str, language_id: str, robot_host: str,
                     downloaded: Callable[[], bool], timeout: float = 120,
                     poll_interval: float = 2, log=print) -> None:

@@ -26,8 +26,10 @@ def list_voices(root):
         try:
             v = load_voice(root, name)
             spoken = sum(1 for line in v.lines if line.text)
+            varied = sum(1 for n in v.variant_counts.values() if n > 1)
+            rotation = f", {varied} with variants, next change {v.next_change}" if v.next_change else ""
             click.echo(f"{name:<16} {v.engine:<8} language_id={v.language_id:<10} "
-                       f"{spoken} spoken, {len(v.lines) - spoken} from files")
+                       f"{spoken} spoken, {len(v.lines) - spoken} from files{rotation}")
         except ConfigError as e:
             click.echo(f"{name:<16} INVALID: {e}")
 
@@ -53,11 +55,13 @@ def new(root, name, engine_type):
 @main.command()
 @click.argument("name")
 @click.option("--only", multiple=True, metavar="ID", help="Regenerate only these line IDs (repeatable).")
+@click.option("--date", "on", type=click.DateTime(["%Y-%m-%d"]),
+              help="Use the variants for this day instead of today.")
 @click.pass_obj
-def generate(root, name, only):
+def generate(root, name, only, on):
     """Generate audio and a voice pack for voice NAME."""
     try:
-        voice = load_voice(root, name)
+        voice = load_voice(root, name, on=on.date() if on else None)
         digest = run_generate(voice, only=set(only) or None, log=click.echo)
     except (ConfigError, EngineError, FileNotFoundError) as e:
         raise click.ClickException(str(e))

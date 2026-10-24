@@ -1,4 +1,3 @@
-import hashlib
 import tempfile
 from pathlib import Path
 
@@ -40,16 +39,12 @@ def generate(voice: Voice, only: set[str] | None = None, log=print) -> str:
 
     digest = build_pack(voice.audio_dir, voice.pack_path, voice.md5_path)
     if not only:
-        voice.stamp_path.write_text(_source_hash(voice) + "\n")
+        voice.stamp_path.write_text(voice.fingerprint + "\n")
     return digest
 
 
-def _source_hash(voice: Voice) -> str:
-    return hashlib.sha256(voice.source_path.read_bytes()).hexdigest()
-
-
 def pack_is_current(voice: Voice) -> bool:
-    """True if the pack was fully generated from the voice file as it is now."""
+    """True if the pack was fully generated from the voice's current lines and engine."""
     if not (voice.pack_path.exists() and voice.md5_path.exists() and voice.stamp_path.exists()):
         return False
-    return voice.stamp_path.read_text().strip() == _source_hash(voice)
+    return voice.stamp_path.read_text().strip() == voice.fingerprint

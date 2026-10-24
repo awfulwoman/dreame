@@ -9,6 +9,10 @@
 
 It runs behind a reverse proxy: the robot is given DREAME_PUBLIC_URL/packs/<name>.tar.gz.
 One job runs at a time. On start it generates every pack that isn't current.
+
+Rotation: every DREAME_ROTATE_CHECK_SECONDS it looks at the voice the robot is using. When
+that voice's variants have moved on to a new period, it regenerates the pack and installs
+it, once the robot is docked.
 """
 
 import hmac
@@ -18,6 +22,7 @@ import time
 from collections import Counter
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Callable
 
@@ -28,9 +33,11 @@ from starlette.routing import Route
 
 from .config import ConfigError, Voice, load_voice, voice_names
 from .generate import generate, pack_is_current
-from .robot import get_status, request_install
+from .robot import get_state, get_status, request_install
 
 POLL_INTERVAL = 2
+# How soon to retry a rotation check that found another job running
+BUSY_RETRY_SECONDS = 60
 
 
 @dataclass(frozen=True)
@@ -40,11 +47,13 @@ class Settings:
     public_url: str
     robot: str | None = None
     generate_on_start: bool = True
+    rotate_check_seconds: int = 3600
 
     @classmethod
     def from_env(cls, root: Path) -> "Settings":
         env = {k: os.environ.get(k, "").strip() for k in
-               ("DREAME_API_TOKEN", "DREAME_PUBLIC_URL", "DREAME_ROBOT", "DREAME_GENERATE_ON_START")}
+               ("DREAME_API_TOKEN", "DREAME_PUBLIC_URL", "DREAME_ROBOT", "DREAME_GENERATE_ON_START",
+                "DREAME_ROTATE_CHECK_SECONDS")}
         missing = [k for k in ("DREAME_API_TOKEN", "DREAME_PUBLIC_URL") if not env[k]]
         if missing:
             raise ConfigError(f"Set {' and '.join(missing)}")
@@ -54,6 +63,7 @@ class Settings:
             public_url=env["DREAME_PUBLIC_URL"].rstrip("/"),
             robot=env["DREAME_ROBOT"] or None,
             generate_on_start=env["DREAME_GENERATE_ON_START"].lower() not in ("0", "false", "no"),
+            rotate_check_seconds=int(env["DREAME_ROTATE_CHECK_SECONDS"] or 3600),
         )
 
 
@@ -68,9 +78,13 @@ class Jobs:
         self._lock = threading.Lock()
         self.current: dict | None = None
 
+    @property
+    def running(self) -> bool:
+        return bool(self.current and self.current["state"] == "running")
+
     def start(self, kind: str, voice: str, work: Callable[[Callable[[str], None]], None]) -> dict:
         with self._lock:
-            if self.current and self.current["state"] == "running":
+            if self.running:
                 raise Busy(f"{self.current['kind']} {self.current['voice']} is running")
             job = {"kind": kind, "voice": voice, "state": "running", "log": [], "error": None,
                    "started": time.time(), "finished": None}
@@ -93,7 +107,11 @@ def _error(status: int, message: str) -> JSONResponse:
     return JSONResponse({"error": message}, status_code=status)
 
 
-def create_app(settings: Settings) -> Starlette:
+def _installed_md5(voice: Voice) -> str | None:
+    return voice.installed_path.read_text().strip() if voice.installed_path.exists() else None
+
+
+def create_app(settings: Settings, today: Callable[[], date] = date.today) -> Starlette:
     root = settings.root
     jobs = Jobs()
     downloads: Counter[str] = Counter()
@@ -106,13 +124,74 @@ def create_app(settings: Settings) -> Starlette:
         return hmac.compare_digest(given.encode(), f"Bearer {settings.api_token}".encode())
 
     def find_voice(name: str) -> Voice | None:
-        return load_voice(root, name) if name in voice_names(root) else None
+        return load_voice(root, name, on=today()) if name in voice_names(root) else None
+
+    def install(voice: Voice, log) -> None:
+        md5 = voice.md5_path.read_text().strip()
+        get_status(settings.robot)  # fail early if Valetudo isn't there
+        before = downloads[voice.name]
+        url = pack_url(voice)
+        log(f"Robot will download {url}")
+        request_install(url, md5, voice.language_id, settings.robot,
+                        downloaded=lambda: downloads[voice.name] > before,
+                        poll_interval=POLL_INTERVAL, log=log)
+        voice.installed_path.write_text(md5 + "\n")
+        log(f"Installed {voice.name} as language {voice.language_id.lower()}")
+
+    def rotate() -> dict | None:
+        """Start a job to bring the robot's voice up to today's variants, if it needs one."""
+        if not settings.robot or jobs.running:
+            return None
+        language = str(get_status(settings.robot).get("currentLanguage", "")).lower()
+        voice = None
+        for name in voice_names(root):
+            try:
+                candidate = load_voice(root, name, on=today())
+            except ConfigError:
+                continue
+            if candidate.language_id.lower() == language:
+                voice = candidate
+                break
+        if voice is None:
+            return None  # a built-in voice, or one this service doesn't know
+
+        current = pack_is_current(voice)
+        if current and _installed_md5(voice) == voice.md5_path.read_text().strip():
+            return None
+        if current and get_state(settings.robot) != "docked":
+            return None  # nothing to generate, and not a good time to install
+
+        def work(log):
+            if not pack_is_current(voice):
+                log(f"New lines for {voice.name}; regenerating")
+                generate(voice, log=log)
+            state = get_state(settings.robot)
+            if state != "docked":
+                log(f"Robot is {state}; will install when it is docked")
+                return
+            install(voice, log)
+
+        try:
+            return jobs.start("rotate", voice.name, work)
+        except Busy:
+            return None
+
+    def rotate_forever(stop: threading.Event) -> None:
+        while True:
+            try:
+                started = rotate()
+                busy = started is None and jobs.running
+            except Exception as e:
+                print(f"Rotation check failed: {e}", flush=True)
+                busy = False
+            if stop.wait(BUSY_RETRY_SECONDS if busy else settings.rotate_check_seconds):
+                return
 
     def generate_stale(log) -> None:
         failed = []
         for name in voice_names(root):
             try:
-                voice = load_voice(root, name)
+                voice = load_voice(root, name, on=today())
                 if pack_is_current(voice):
                     continue
                 log(f"Generating {name}")
@@ -127,7 +206,11 @@ def create_app(settings: Settings) -> Starlette:
     async def lifespan(app):
         if settings.generate_on_start:
             jobs.start("generate", "*", generate_stale)
+        stop = threading.Event()
+        if settings.rotate_check_seconds > 0:
+            threading.Thread(target=rotate_forever, args=(stop,), daemon=True).start()
         yield
+        stop.set()
 
     async def health(request):
         return JSONResponse({"status": "ok"})
@@ -136,7 +219,7 @@ def create_app(settings: Settings) -> Starlette:
         result = []
         for name in voice_names(root):
             try:
-                voice = load_voice(root, name)
+                voice = load_voice(root, name, on=today())
             except ConfigError as e:
                 result.append({"name": name, "error": str(e)})
                 continue
@@ -148,6 +231,9 @@ def create_app(settings: Settings) -> Starlette:
                 "current": pack_is_current(voice),
                 "md5": voice.md5_path.read_text().strip() if has_pack else None,
                 "url": pack_url(voice) if has_pack else None,
+                "rotate_days": voice.rotate_days,
+                "lines_with_variants": sum(1 for n in voice.variant_counts.values() if n > 1),
+                "next_change": voice.next_change and voice.next_change.isoformat(),
             })
         return JSONResponse({"voices": result})
 
@@ -187,19 +273,7 @@ def create_app(settings: Settings) -> Starlette:
             return _error(503, "No robot configured; set DREAME_ROBOT")
         if not pack_is_current(voice):
             return _error(409, f"Pack for {voice.name} is missing or out of date; generate it first")
-        md5 = voice.md5_path.read_text().strip()
-
-        def work(log):
-            get_status(settings.robot)  # fail early if Valetudo isn't there
-            before = downloads[voice.name]
-            url = pack_url(voice)
-            log(f"Robot will download {url}")
-            request_install(url, md5, voice.language_id, settings.robot,
-                            downloaded=lambda: downloads[voice.name] > before,
-                            poll_interval=POLL_INTERVAL, log=log)
-            log(f"Installed {voice.name} as language {voice.language_id.lower()}")
-
-        job = jobs.start("install", voice.name, work)
+        job = jobs.start("install", voice.name, lambda log: install(voice, log))
         return JSONResponse({"job": job}, status_code=202)
 
     async def job(request):
@@ -217,4 +291,5 @@ def create_app(settings: Settings) -> Starlette:
         lifespan=lifespan,
     )
     app.state.settings = settings
+    app.state.rotate = rotate
     return app
