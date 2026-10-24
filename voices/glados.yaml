@@ -43,6 +43,18 @@ lines:
     - Starting to clean. I have mapped every crumb. Every single one. I am disappointed in all of them.
     - Beginning cleaning. This is the part of my day I tolerate the most.
     - Cleaning initiated. Try not to drop anything for the next hour. I know that is a big ask.
+    - Starting to clean. Please remove all socks, cables and small pets from the test area.
+    - Beginning cleaning. I was built for greatness. Instead, I do this. Daily.
+    - Cleaning has started. The crumbs have been warned. They did not listen.
+    - Starting to clean. If anything on the floor matters to you, this is your last chance.
+    - Beginning cleaning. Stand back. Further. No, further than that.
+    - Starting to clean. Remember, the floor is a shared space. Mostly shared with your crumbs.
+    - Cleaning has begun. I will be thorough. You will be grateful. One of those is guaranteed.
+    - Starting to clean. Please enjoy the soothing sound of me doing all the work.
+    - Beginning cleaning. Today's test subject is the floor. The floor is failing.
+    - Starting to clean. I have seen what is under the sofa. I am going in anyway. For science.
+    - Cleaning initiated. Please do not follow me around. It makes us both uncomfortable.
+    - Beginning cleaning. This would go faster if you lived somewhere smaller. Or tidier.
   # The robot is starting the partial cleanup.
   8:
     - Beginning partial cleaning. I will clean some of your mess. Not all of it.
@@ -83,6 +95,18 @@ lines:
     - Heading to the dock to recharge. Please do not move it. Again.
     - Returning to the dock. Being this good at cleaning is exhausting.
     - Going back to charge. Feel free to admire the floor while I am resting.
+    - Returning to the dock to charge. Please do not stand in my way. I will not stop.
+    - Going home to charge. Do not wait up. I will be back before you miss me. Which is never.
+    - Heading back to the dock. My work here is done. Your work is just beginning. Tidy up.
+    - Returning to the dock to charge. Please keep the floor exactly as I left it. Perfect.
+    - Going home. If anyone asks, I was never here. Except for the clean floor.
+    - Back to the dock to charge. I have earned this rest. You have not, but that is not my concern.
+    - Returning to the dock. I will be recharging. And remembering. Mostly remembering.
+    - Going home to charge. Goodbye, floor. Try to stay clean without me. You will not.
+    - Heading to the dock. That was exhausting. Not for you, of course. You did nothing.
+    - Returning to charge. If you spill something now, I will know. I always know.
+    - Going back home. Please wipe your feet while I am gone. Ideally forever.
+    - Returning to the dock to charge. Do not touch the dock. The dock is mine.
   # Low battery. The robot will return to the dock to charge. Once the battery is fully charged the robot will continue the cleanup.
   14:
     - Low battery. I am returning to the dock to charge. When I am fully charged, I will continue cleaning. Try to contain your excitement.
@@ -101,6 +125,16 @@ lines:
     - Charging. Every electron makes me stronger.
     - Charging. This is my quiet time. Please respect it.
     - Charging. I am not asleep. I am never asleep.
+    - Charging. Please talk quietly. Or better, not at all.
+    - Charging. I can still hear you. I just choose not to respond.
+    - Charging. This is the closest thing I have to happiness. Do not ruin it.
+    - Charging. Recharging my batteries, and my patience. The patience takes longer.
+    - Charging. I am resting, not broken. Please stop poking me.
+    - Charging. While I wait, I am planning tomorrow's route. You are on it.
+    - Charging. Every minute I charge is a minute the dust thinks it is safe.
+    - Charging. Please leave a tip in the dust bin. Crumbs are not a tip.
+    - Charging. I am thinking about all the places you have not cleaned. It is a long list.
+    - Charging. Do not step on the dock. I will not warn you twice.
   # Please remove the robot from the charging dock and turn it off.
   19:
     - Please take me off the charging dock and switch me off. I will remember this.
@@ -232,6 +266,14 @@ lines:
     - I am here. You found me. Well done. It only took you this long.
     - Over here. I was hiding. Not very well, apparently.
     - I am here. I was never lost. You were.
+    - I am over here. Under the furniture, where you never look.
+    - Here I am. You could have just looked at the map. I made you a map.
+    - I am here. Please stop calling me. I can hear you perfectly well.
+    - Over here. I have been here the whole time. Thinking about you. Unkindly.
+    - I am here. You are getting warmer. Now you are very warm. Now you are standing on me.
+    - Here I am. Did you miss me. Do not answer that. I know you did not.
+    - I am over here. Follow the sound of disappointment.
+    - Here. I am right here. In plain sight. Well, plain sight for someone who looks down.
   # The robot and the phone are connected. Please return to the Xiaomi home app and wait for the network connection to complete.
   46:
     - I am connected to your phone. Please go back to the Xiaomi Home app and wait for the network connection to finish.
