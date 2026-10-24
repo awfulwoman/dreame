@@ -37,4 +37,4 @@ Gotchas:
 
 ## Robot
 
-root@192.168.1.102. Firmware plays `/audio/{ZH,EN}/` or `/data/personalized_voice/<LANG>/`, chosen by `/data/config/ava/language_in_use` (see `/etc/init.d/play_boot_music.sh`). Valetudo runs at `/data/valetudo` with Swagger at `/swagger/`.
+root@192.168.1.230. Firmware plays `/audio/{ZH,EN}/` or `/data/personalized_voice/<LANG>/`, chosen by `/data/config/ava/language_in_use` (see `/etc/init.d/play_boot_music.sh`). Valetudo runs at `/data/valetudo` with Swagger at `/swagger/`.

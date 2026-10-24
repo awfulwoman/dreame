@@ -29,7 +29,7 @@ uv run dreame-voice new marvin --engine say       # start voices/marvin.yaml
 uv run dreame-voice list
 uv run dreame-voice generate glados
 uv run dreame-voice generate glados --only 13 --only 18   # redo some lines, rebuild the pack
-uv run dreame-voice install glados --robot 192.168.1.102  # or set DREAME_ROBOT
+uv run dreame-voice install glados --robot 192.168.1.230  # or set DREAME_ROBOT
 uv run pytest
 ```
 
